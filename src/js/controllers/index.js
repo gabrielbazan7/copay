@@ -1467,10 +1467,6 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     self.initCoinbase(accessToken);
   });
 
-  $rootScope.$on('Local/BitstampUpdated', function(event, accessToken) {
-    self.initBitstamp(accessToken);
-  });
-
   $rootScope.$on('Local/GlideraTx', function(event, accessToken, permissions) {
     self.updateGlidera();
   });

@@ -252,6 +252,14 @@ angular.module('copayApp.services')
       storage.remove('coinbaseToken-' + network, cb);
     };
 
+    root.setBitstampCredentials = function(credentials, cb) {
+      storage.set('bitstampCredentials', credentials, cb);
+    };
+
+    root.getBitstampCredentials = function(cb) {
+      storage.get('bitstampCredentials', cb);
+    };
+
     root.setAddressbook = function(network, addressbook, cb) {
       storage.set('addressbook-' + network, addressbook, cb);
     };
