@@ -27,6 +27,7 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
       $scope.spendUnconfirmed = config.wallet.spendUnconfirmed;
       $scope.glideraEnabled = config.glidera.enabled;
       $scope.coinbaseEnabled = config.coinbase.enabled;
+      $scope.bitstampEnabled = config.bitstamp.enabled;
       $scope.pushNotifications = config.pushNotifications.enabled;
     };
 
@@ -88,4 +89,17 @@ angular.module('copayApp.controllers').controller('preferencesGlobalController',
         if (err) $log.debug(err);
       });
     };
+
+    $scope.bitstampChange = function() {
+      var opts = {
+        bitstamp: {
+          enabled: $scope.bitstampEnabled
+        }
+      };
+      configService.set(opts, function(err) {
+        $rootScope.$emit('Local/BitstampUpdated');
+        if (err) $log.debug(err);
+      });
+    };
+
   });

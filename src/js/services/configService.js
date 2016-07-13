@@ -43,6 +43,11 @@ angular.module('copayApp.services').factory('configService', function(storageSer
       testnet: false
     },
 
+    bitstamp: {
+      enabled: true,
+      testnet: false
+    },
+
     rates: {
       url: 'https://insight.bitpay.com:443/api/rates',
     },
@@ -100,6 +105,9 @@ angular.module('copayApp.services').factory('configService', function(storageSer
         }
         if (!configCache.coinbase) {
           configCache.coinbase = defaultConfig.coinbase;
+        }
+        if (!configCache.bitstamp) {
+          configCache.bitstamp = defaultConfig.bitstamp;
         }
         if (!configCache.pushNotifications) {
           configCache.pushNotifications = defaultConfig.pushNotifications;

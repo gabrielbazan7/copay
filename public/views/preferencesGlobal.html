@@ -75,6 +75,11 @@
   </ion-toggle>
   <h4></h4>
 
+  <ion-toggle ng-show="!index.isWindowsPhoneApp" ng-model="bitstampEnabled" toggle-class="toggle-balanced" ng-change="bitstampChange()">
+    <span class="toggle-label" translate>Enable bitstamp Service</span>
+  </ion-toggle>
+  <h4></h4>
+
   <ul class="no-bullet m0">
     <li href ui-sref="about">
       <i class="icon-arrow-right3 size-24 right text-gray"></i>

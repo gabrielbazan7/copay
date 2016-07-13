@@ -306,6 +306,16 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
           },
         }
       })
+      .state('bitstamp', {
+        url: '/bitstamp',
+        walletShouldBeComplete: true,
+        needProfile: true,
+        views: {
+          'main': {
+            templateUrl: 'views/bitstamp.html'
+          },
+        }
+      })
       .state('buyandsell', {
         url: '/buyandsell',
         needProfile: true,

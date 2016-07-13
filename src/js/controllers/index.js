@@ -161,6 +161,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
       self.initGlidera();
       self.initCoinbase();
+      self.initBitstamp();
 
       self.hideBalance();
 
@@ -1121,6 +1122,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
   self.initCoinbase = function(accessToken) {
     self.coinbaseEnabled = configService.getSync().coinbase.enabled;
     self.coinbaseTestnet = configService.getSync().coinbase.testnet;
+
     var network = self.coinbaseTestnet ? 'testnet' : 'livenet';
 
     self.coinbaseToken = null;
@@ -1410,6 +1412,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
     });
   };
 
+  self.initBitstamp = function(accessToken) {
+    self.bitstampEnabled = configService.getSync().bitstamp.enabled;
+  };
+
   $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
     self.prevState = from.name || 'walletHome';
     self.tab = 'walletHome';
@@ -1459,6 +1465,10 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   $rootScope.$on('Local/CoinbaseUpdated', function(event, accessToken) {
     self.initCoinbase(accessToken);
+  });
+
+  $rootScope.$on('Local/BitstampUpdated', function(event, accessToken) {
+    self.initBitstamp(accessToken);
   });
 
   $rootScope.$on('Local/GlideraTx', function(event, accessToken, permissions) {
