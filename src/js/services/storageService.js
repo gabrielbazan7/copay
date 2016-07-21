@@ -299,7 +299,7 @@ angular.module('copayApp.services')
         });
       });
     };
-    
+
     root.setAmazonGiftCards = function(network, gcs, cb) {
       storage.set('amazonGiftCards-' + network, gcs, cb);
     };
@@ -310,18 +310,6 @@ angular.module('copayApp.services')
 
     root.removeAmazonGiftCards = function(network, cb) {
       storage.remove('amazonGiftCards-' + network, cb);
-    };
-
-    root.setAmazon = function(network, data, cb) {
-      storage.set('amazon-' + network, data, cb);
-    };
-
-    root.getAmazon = function(network, cb) {
-      storage.get('amazon-' + network, cb);
-    };
-
-    root.removeAmazon = function(network, cb) {
-      storage.remove('amazon-' + network, cb);
     };
 
     return root;
