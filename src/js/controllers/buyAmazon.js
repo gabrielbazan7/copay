@@ -19,13 +19,18 @@ angular.module('copayApp.controllers').controller('buyAmazonController',
       amazonService.setCredentials(network);
       self.allWallets = profileService.getWallets(network, 1);
       client = profileService.focusedClient;
-      if (client && client.credentials.m == 1 && client.credentials.network == network) {
-        $timeout(function() {
-          self.selectedWalletId = client.credentials.walletId;
-          self.selectedWalletName = client.credentials.walletName;
-          $scope.$apply();
-        }, 100);
-      }
+
+      if (!client) return;
+
+      if (lodash.isEmpty(self.allWallets)) return;
+
+      if (client.credentials.network != network) return;
+
+      $timeout(function() {
+        self.selectedWalletId = client.credentials.walletId;
+        self.selectedWalletName = client.credentials.walletName;
+        $scope.$apply();
+      }, 100);
     };
 
     $scope.openWalletsModal = function(wallets) {
@@ -194,14 +199,16 @@ angular.module('copayApp.controllers').controller('buyAmazonController',
       amazonService.createGiftCard(dataSrc, function(err, giftCard) {
         $log.debug("creating gift card " + count);
         if (err) {
+          giftCard = {};
+          giftCard.status = 'FAILURE';
           ongoingProcess.set('Processing Transaction...', false);
           self.error = bwcError.msg(err);
           self.errorInfo = dataSrc;
           $timeout(function() {
             $scope.$digest();
           });
-          return;
         }
+
         if (giftCard.status == 'PENDING' && count < 3) {
           $log.debug("pending gift card not available yet");
           self.debounceCreate(count + 1, dataSrc, dataSrc);

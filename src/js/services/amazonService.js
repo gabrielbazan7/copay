@@ -5,11 +5,9 @@ angular.module('copayApp.services').factory('amazonService', function($http, $lo
 
   root.setCredentials = function(network) {
     if (network == 'testnet') {
-      credentials.BITPAY_API_URL = window.amazon_sandbox_bitpay_api_url;
-      credentials.BITPAY_API_TOKEN = window.amazon_sandbox_bitpay_api_token;
+      credentials.BITPAY_API_URL = "https://test.bitpay.com";
     } else {
-      credentials.BITPAY_API_URL = window.amazon_bitpay_api_url;
-      credentials.BITPAY_API_TOKEN = window.amazon_bitpay_api_token;
+      credentials.BITPAY_API_URL = "https://bitpay.com";
     };
   };
 
@@ -24,7 +22,6 @@ angular.module('copayApp.services').factory('amazonService', function($http, $lo
   };
 
   var _postBitPay = function(endpoint, data) {
-    data.token = credentials.BITPAY_API_TOKEN;
     return {
       method: 'POST',
       url: credentials.BITPAY_API_URL + endpoint,
@@ -104,7 +101,7 @@ angular.module('copayApp.services').factory('amazonService', function($http, $lo
     };
 
     $http(_postBitPay('/amazon-gift/redeem', dataSrc)).then(function(data) {
-      var status = data.data.status == ('new' || 'paid') ? 'PENDING' : data.data.status;
+      var status = data.data.status == 'new' ? 'PENDING' : (data.data.status == 'paid') ? 'PENDING' : data.data.status;
       data.data.status = status;
       $log.info('Amazon.com Gift Card Create/Update: ' + status);
       return cb(null, data.data);
