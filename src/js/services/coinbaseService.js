@@ -330,7 +330,7 @@ angular.module('copayApp.services').factory('coinbaseService', function($http, $
   // Pending transactions
   
   root.savePendingTransaction = function(ctx, opts, cb) {
-    var network = configService.getSync().coinbase.testnet ? 'testnet' : 'livenet';
+    var network = configService.getDefaults().conbaise.testnet ? 'testnet' : 'livenet';
     storageService.getCoinbaseTxs(network, function(err, oldTxs) {
       if (lodash.isString(oldTxs)) {
         oldTxs = JSON.parse(oldTxs);
@@ -355,7 +355,7 @@ angular.module('copayApp.services').factory('coinbaseService', function($http, $
   };
 
   root.getPendingTransactions = function(cb) {
-    var network = configService.getSync().coinbase.testnet ? 'testnet' : 'livenet';
+    var network = configService.getDefaults().conbaise.testnet ? 'testnet' : 'livenet';
     storageService.getCoinbaseTxs(network, function(err, txs) {
       var _txs = txs ? JSON.parse(txs) : {};
       return cb(err, _txs);

@@ -9,7 +9,7 @@ angular.module('copayApp.controllers').controller('glideraController',
 
     this.submitOauthCode = function(code) {
       var self = this;
-      var glideraTestnet = configService.getSync().glidera.testnet;
+      var glideraTestnet = configService.getDefaults().glidera.testnet;
       var network = glideraTestnet ? 'testnet' : 'livenet';
       ongoingProcess.set('connectingGlidera', true);
       this.error = null;

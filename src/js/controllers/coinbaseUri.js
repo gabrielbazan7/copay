@@ -4,7 +4,7 @@ angular.module('copayApp.controllers').controller('coinbaseUriController',
 
     this.submitOauthCode = function(code) {
       var self = this;
-      var coinbaseTestnet = configService.getSync().coinbase.testnet;
+      var coinbaseTestnet = configService.getDefaults().conbaise.testnet;
       var network = coinbaseTestnet ? 'testnet' : 'livenet';
       ongoingProcess.set('connectingCoinbase', true);
       this.error = null;

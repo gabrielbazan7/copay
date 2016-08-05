@@ -5,7 +5,7 @@ angular.module('copayApp.controllers').controller('amazonController',
 
     this.init = function() {
       var self = this;
-      var network = configService.getSync().amazon.testnet ? 'testnet' : 'livenet';
+      var network = configService.getDefaults().amazon.testnet ? 'testnet' : 'livenet';
       self.sandbox = network == 'testnet' ? true : false;
       amazonService.setCredentials(network);
       amazonService.getPendingGiftCards(function(err, gcds) {

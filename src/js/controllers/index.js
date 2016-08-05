@@ -1043,7 +1043,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   self.initGlidera = function(accessToken) {
     self.glideraEnabled = configService.getSync().glidera.enabled;
-    self.glideraTestnet = configService.getSync().glidera.testnet;
+    self.glideraTestnet = configService.getDefaults().glidera.testnet;
     var network = self.glideraTestnet ? 'testnet' : 'livenet';
 
     self.glideraToken = null;
@@ -1120,7 +1120,7 @@ angular.module('copayApp.controllers').controller('indexController', function($r
 
   self.initCoinbase = function(accessToken) {
     self.coinbaseEnabled = configService.getSync().coinbase.enabled;
-    self.coinbaseTestnet = configService.getSync().coinbase.testnet;
+    self.coinbaseTestnet = configService.getDefaults().conbaise.testnet;
     var network = self.coinbaseTestnet ? 'testnet' : 'livenet';
 
     self.coinbaseToken = null;

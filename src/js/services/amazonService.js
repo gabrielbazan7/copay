@@ -33,7 +33,7 @@ angular.module('copayApp.services').factory('amazonService', function($http, $lo
   };
 
   root.savePendingGiftCard = function(gc, opts, cb) {
-    var network = configService.getSync().amazon.testnet ? 'testnet' : 'livenet';
+    var network = configService.getDefaults().amazon.testnet ? 'testnet' : 'livenet';
     storageService.getAmazonGiftCards(network, function(err, oldGiftCards) {
       if (lodash.isString(oldGiftCards)) {
         oldGiftCards = JSON.parse(oldGiftCards);
@@ -58,7 +58,7 @@ angular.module('copayApp.services').factory('amazonService', function($http, $lo
   };
 
   root.getPendingGiftCards = function(cb) {
-    var network = configService.getSync().amazon.testnet ? 'testnet' : 'livenet';
+    var network = configService.getDefaults().amazon.testnet ? 'testnet' : 'livenet';
     storageService.getAmazonGiftCards(network, function(err, giftCards) {
       var _gcds = giftCards ? JSON.parse(giftCards) : null;
       return cb(err, _gcds);

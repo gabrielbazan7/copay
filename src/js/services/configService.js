@@ -35,17 +35,17 @@ angular.module('copayApp.services').factory('configService', function(storageSer
     // External services
     glidera: {
       enabled: true,
-      testnet: false
+      testnet: false // true for testnet Glidera
     },
 
     coinbase: {
       enabled: true,
-      testnet: false
+      testnet: false // true for testnet Coinbase
     },
 
     amazon: {
       enabled: true,
-      testnet: false
+      testnet: false //true for testnet Amazon
     },
 
     rates: {
@@ -116,18 +116,6 @@ angular.module('copayApp.services').factory('configService', function(storageSer
       } else {
         configCache = lodash.clone(defaultConfig);
       };
-
-      // Glidera
-      // Disabled for testnet
-      configCache.glidera.testnet = false;
-
-      // Coinbase
-      // Disabled for testnet
-      configCache.coinbase.testnet = false;
-
-      // Amazon
-      // Disabled for testnet
-      configCache.amazon.testnet = false;
 
       $log.debug('Preferences read:', configCache)
       return cb(err, configCache);
