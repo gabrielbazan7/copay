@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('sellGlideraController',
-  function($rootScope, $scope, $timeout, $ionicModal, $log, configService, profileService, addressService, feeService, glideraService, bwcError, lodash, walletService, fingerprintService, ongoingProcess, go) {
+  function($rootScope, $scope, $timeout, $ionicModal, $log, configService, profileService, addressService, feeService, glideraService, bwcError, lodash, walletService, ongoingProcess, go) {
 
     var self = this;
     var config = configService.getSync();
@@ -149,12 +149,7 @@ angular.module('copayApp.controllers').controller('sellGlideraController',
               return;
             }
             $scope.$emit('Local/NeedsConfirmation', createdTxp, function(accept) {
-              if (accept) {
-                fingerprintService.check(client, function(err) {
-                  if (err) {
-                    self.error = err.message ||  bwcError.msg(err);
-                    return;
-                  }
+                if (accept) {
 
                   handleEncryptedWallet(client, function(err) {
                     if (err) {
@@ -204,10 +199,10 @@ angular.module('copayApp.controllers').controller('sellGlideraController',
                     });
                   });
                 });
-              } else {
-                go.path('glidera');
-              }
-            });
+            }
+            else {
+              go.path('glidera');
+            }
           });
         });
       });
