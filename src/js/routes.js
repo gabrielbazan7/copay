@@ -526,6 +526,34 @@ angular.module('copayApp').config(function(historicLogProvider, $provide, $logPr
 
     /*
      *
+     * Onboarding
+     *
+     */
+
+    .state('onboarding', {
+        url: '/onboarding',
+        abstract: true,
+        template: '<ion-nav-view name="onboarding"></ion-nav-view>'
+      })
+      .state('onboarding.init', {
+        url: '/init',
+        views: {
+          'onboarding': {
+            templateUrl: 'views/onboardingInit.html'
+          }
+        }
+      })
+      .state('onboarding.started', {
+        url: '/started',
+        views: {
+          'onboarding': {
+            templateUrl: 'views/onboardingStarted.html'
+          }
+        }
+      })
+
+    /*
+     *
      * Glidera
      *
      */

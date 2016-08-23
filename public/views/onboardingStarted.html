@@ -1,0 +1,54 @@
+<ion-view ng-controller="onboardingStartedController" ng-init="init()">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-title></ion-nav-title>
+    <ion-nav-buttons side="primary">
+      <button class="button no-border" ui-sref="onboarding.init">
+        <i class="icon ion-chevron-left"></i> Back
+      </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="secondary">
+      <button class="button no-border" ui-sref="onboarding.init" ng-show="data.index == 2">
+        Skip
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content cache-view="false">
+    <div class="item item-text-wrap" ng-style="{'height': '200px'}">
+      <ion-slides class="slides" options="options" slider="data.slider">
+        <ion-slide-page>
+          <div class="text-center">
+            <h2 translate>Bitcoin is digital money</h2>
+            <p translate>
+              You can spend bitcoin at millions of websites and stores worldwide
+            </p>
+            <p translate>
+              Just scan the code to pay
+            </p>
+          </div>
+        </ion-slide-page>
+        <ion-slide-page>
+          <div class="text-center">
+            <h2 translate>Bitcoin is currency</h2>
+            <p translate>
+              You can trade it for other currencies like US Dollars, Euros, or Pounds
+            </p>
+            <p translate>
+              The exchange rate changes with the market
+            </p>
+          </div>
+        </ion-slide-page>
+        <ion-slide-page>
+          <div class="text-center">
+            <h2 translate>You control your bitcoin</h2>
+            <p translate>
+              The BitPay wallet stores your bitcoin with cutting-edge security
+            </p>
+            <p translate>
+              Not even BitPay can access it
+            </p>
+          <div>
+        </ion-slide-page>
+      </ion-slides>
+    </div>
+  </ion-content>
+</ion-view>
