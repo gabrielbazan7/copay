@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('copayApp.controllers').controller('cashScanController',
-  function($rootScope, $timeout, $scope, $state, $stateParams, $ionicModal, $ionicScrollDelegate, $ionicHistory, $window, gettextCatalog, lodash, popupService, ongoingProcess, profileService, walletService, configService, $log, txFormatService, bwcError, pushNotificationsService, bwcService) {
+  function($rootScope, $timeout, $scope, $state, $ionicHistory, gettextCatalog, lodash, ongoingProcess, profileService, walletService, $log, txFormatService, bwcError, pushNotificationsService, bwcService, externalLinkService) {
     var wallet;
     var errors = bwcService.getErrors();
     $scope.error = null;
@@ -10,6 +10,16 @@ angular.module('copayApp.controllers').controller('cashScanController',
     $scope.$on("$ionicView.beforeEnter", function(event, data) {
       updateAllWallets();
     });
+
+    $scope.openExternalLink = function() {
+      var url = 'https://bitpay.github.io/copay-recovery/';
+      var optIn = true;
+      var title = null;
+      var message = gettextCatalog.getString('Open the recovery tool.');
+      var okText = gettextCatalog.getString('Open');
+      var cancelText = gettextCatalog.getString('Go Back');
+      externalLinkService.open(url, optIn, title, message, okText, cancelText);
+    };
 
     var goHome = function() {
       $ionicHistory.nextViewOptions({
