@@ -10,9 +10,9 @@
   <ion-content>
 
 <div class="list card">
-  <div ng-if="(!availableWallets || !availableWallets[0]) && !nonEligibleWallets[0]">
+  <div ng-if="!availableWallets[0] && !nonEligibleWallets[0] && !nonBackedUpWallets[0]">
     <div class="item">
-      <span class="assertive" translate>No wallets eligible for Bitcoin Cash support</span>
+      <span class="assertive" translate>No wallets available for Bitcoin Cash support</span>
     </div>
 
     <div class="item item-divider"></div>
