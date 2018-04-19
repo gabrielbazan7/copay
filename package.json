@@ -16,5 +16,8 @@
   "repository": {
     "url": "git://github.com/bitpay/copay.git",
     "type": "git"
+  },
+  "dependencies": {
+    "fileicon": "^0.2.2"
   }
 }
