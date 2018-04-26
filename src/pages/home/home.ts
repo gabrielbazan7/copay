@@ -39,7 +39,6 @@ import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { PushNotificationsProvider } from '../../providers/push-notifications/push-notifications';
 import { ReleaseProvider } from '../../providers/release/release';
 import { WalletProvider } from '../../providers/wallet/wallet';
 
@@ -90,7 +89,6 @@ export class HomePage {
     private logger: Logger,
     private events: Events,
     private configProvider: ConfigProvider,
-    private pushNotificationsProvider: PushNotificationsProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private popupProvider: PopupProvider,
@@ -126,7 +124,6 @@ export class HomePage {
 
   ionViewWillEnter() {
     this.config = this.configProvider.get();
-    this.pushNotificationsProvider.init();
 
     this.addressBookProvider
       .list()
