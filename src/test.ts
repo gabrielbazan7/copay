@@ -62,12 +62,15 @@ import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth';
 import { FCM } from '@ionic-native/fcm';
 import { File } from '@ionic-native/file';
 import { QRScanner } from '@ionic-native/qr-scanner';
+
 import { TouchID } from '@ionic-native/touch-id';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { AppProvider } from './providers/app/app';
 import { PersistenceProvider } from './providers/persistence/persistence';
 import { PlatformProvider } from './providers/platform/platform';
+
+import { ProvidersModule } from './providers/providers.module';
 
 import * as appTemplate from './../app-template/bitpay/appConfig.json';
 
@@ -118,7 +121,7 @@ export class TestUtils {
 
   public static async configurePageTestingModule(
     components: any[],
-    otherParams: any
+    otherParams?: any
   ): Promise<{ fixture: any; instance: any; testBed: typeof TestBed }> {
     const providers = (otherParams && otherParams.providers) || [];
     await TestBed.configureTestingModule({
@@ -128,6 +131,7 @@ export class TestUtils {
         IonicModule,
         MomentModule,
         ReactiveFormsModule,
+        ProvidersModule,
         TranslateModule.forRoot({
           loader: { provide: TranslateLoader, useClass: TranslateFakeLoader }
         }),
