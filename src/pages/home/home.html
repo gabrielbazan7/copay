@@ -46,13 +46,13 @@
     <page-feedback-card #showCard></page-feedback-card>
 
     <ion-card *ngIf="homeTip && wallets && wallets[0]">
-      <ion-card-header>
-        <ion-row>
-          <ion-col text-right (click)="hideHomeTip()">
-            <ion-icon name="md-close"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-card-header>
+      <ion-item-divider>
+        <div item-end>
+          <button ion-button clear icon-only color="grey" (click)="hideHomeTip()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </div>
+      </ion-item-divider>
       <ion-card-content class="check">
         <ion-icon class="big-icon-svg check-icon">
           <img src="assets/img/check-white.svg" class="bg green" />
