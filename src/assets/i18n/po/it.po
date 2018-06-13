@@ -12,7 +12,7 @@ msgstr ""
 "Last-Translator: cmgustavo83\n"
 "Language-Team: Italian\n"
 "Language: it\n"
-"PO-Revision-Date: 2018-06-11 09:23-0400\n"
+"PO-Revision-Date: 2018-06-13 09:56-0400\n"
 
 msgid "(Trusted)"
 msgstr "(Fidato)"
@@ -156,13 +156,13 @@ msgid "Approximate Bitcoin network fee to transfer wallet's balance (with normal
 msgstr "La tariffa approssimativa della rete Bitcoin per il trasferimento del saldo del portafoglio ( con priorità normale)"
 
 msgid "Archive"
-msgstr ""
+msgstr "Archivo"
 
 msgid "Archived"
-msgstr ""
+msgstr "Archiviata"
 
 msgid "Archiving this Gift Card will remove it from this view. You will still be able to see it in the Mercado Livre settings."
-msgstr ""
+msgstr "L'archiviazione di questa carta regalo la rimuoverà da questa finestra. Sarete ancora in grado di vederla nelle impostazioni del Mercado Livre."
 
 msgid "Are you being watched?"
 msgstr "Sei osservato?"
@@ -312,7 +312,7 @@ msgid "Choose a backup file from your computer"
 msgstr "Scegli un file di backup dal tuo computer"
 
 msgid "Claim code:"
-msgstr ""
+msgstr "Reclama codice:"
 
 msgid "Clear"
 msgstr "Elimina"
@@ -1023,7 +1023,7 @@ msgid "Learn more"
 msgstr "Ulteriori informazioni"
 
 msgid "Learn more about testnet blockchain"
-msgstr ""
+msgstr "Ulteriori informazioni sulla blockchain testnet"
 
 msgid "Let's verify your backup phrase."
 msgstr "Verifichiamo la tua frase di backup."
@@ -1155,7 +1155,7 @@ msgid "No entries for this log level"
 msgstr "Nessuna voce per questo livello di log"
 
 msgid "No funds found"
-msgstr ""
+msgstr "Fondi non trovati"
 
 msgid "No password"
 msgstr "Nessuna password"
@@ -1533,7 +1533,7 @@ msgid "Remove"
 msgstr "Rimuovere"
 
 msgid "Removing this Gift Card will remove all their data from this device."
-msgstr ""
+msgstr "La rimozione della scheda regalo rimuoverà tutti i sui dati da questo dispositivo."
 
 msgid "Repeat the password"
 msgstr "Ripeti la password"
@@ -1545,7 +1545,7 @@ msgid "Request Fingerprint"
 msgstr "Richiesta delle impronte digitali"
 
 msgid "Request Specific Amount"
-msgstr ""
+msgstr "Richiedi un importo specifico"
 
 msgid "Required number of signatures"
 msgstr "Selezionare il numero necessario di firme"
@@ -1668,7 +1668,7 @@ msgid "Sending {{amount}} {{unit}} from your {{name}} wallet"
 msgstr "Invio {{amount}} {{unit}} dal tuo portafoglio {{name}}"
 
 msgid "Sensitive Data"
-msgstr ""
+msgstr "Dati sensibili"
 
 msgid "Sent"
 msgstr "Inviato"
@@ -1707,7 +1707,7 @@ msgid "Share"
 msgstr "Condividi"
 
 msgid "Share Address"
-msgstr ""
+msgstr "Condividi indirizzo"
 
 msgid "Share the love by inviting your friends."
 msgstr "Condividi il piacere invitando i tuoi amici."
@@ -1845,7 +1845,7 @@ msgid "The higher the fee, the greater the incentive a miner has to include that
 msgstr "Più alta la commissione, maggiore sarà l'incentivo di un minatore ad includere tale transazione in un blocco. Le attuali commissioni sono determinate basandosi sul carico di rete e il criterio selezionato."
 
 msgid "The information you are about to share/export may contain sensitive data such us wallet IDs, addresses, balances, etc. Please be sure you trust the person or entity with whom you are sharing this information."
-msgstr ""
+msgstr "Le informazioni che state per condividere/esportare potrebbero contenere dati sensibili come il portafoglio ID, indirizzi, saldi, ecc. Si prega di essere sicuri di fidarsi della persona fisica o giuridica con cui condividere queste informazioni."
 
 msgid "The maximum number of consecutive unused addresses (20) has been reached. When one of your unused addresses receives a payment, a new address will be generated and shown in your Receive tab."
 msgstr "È stato raggiunto il numero massimo di indirizzi consecutivi inutilizzati (20). Quando uno dei tuoi indirizzi inutilizzati riceve un pagamento, verrà generato un nuovo indirizzo e mostrato nella tua scheda di ricezione."
@@ -1995,16 +1995,16 @@ msgid "Unconfirmed"
 msgstr "Non confermato"
 
 msgid "Unlink account"
-msgstr ""
+msgstr "Scollegare account"
 
 msgid "Unlink card"
-msgstr ""
+msgstr "Scollegare la carta"
 
 msgid "Unlink the account will remove it and all associated cards from this device."
-msgstr ""
+msgstr "Scollegare l'account lo rimuoverà e con esso tutte le carte associate a questo dispositivo."
 
 msgid "Unlink the card will remove it from this device."
-msgstr ""
+msgstr "Scollegare la carta la farà rimuovere da questo dispositivo."
 
 msgid "Unsent transactions"
 msgstr "Transazioni non inviate"
@@ -2094,7 +2094,7 @@ msgid "WARNING: The private key of this wallet is not available. The export allo
 msgstr "AVVISO: La chiave privata di questo portafoglio non è disponibile. L'esportazione permette di controllare il bilancio del portafoglio, la cronologia delle transazioni e creare proposte di spesa dall'esportazione. Tuttavia, non consente di approvare le proposte (firma), così fondi non saranno accessibili dall'esportazione."
 
 msgid "WARNING: The testnet is an alternative Bitcoin block chain, to be used for testing. Testnet coins are separate and distinct from actual bitcoins, and do not have any value. This allows application developers or bitcoin testers to experiment, without having to use real bitcoins."
-msgstr ""
+msgstr "ATTENZIONE: La testnet è una blockchain Bitcoin alternativa, da utilizzare per i test. Le monete testnet sono separate e distinte dall'effettivo Bitcoin e non hanno alcun valore. Questo consente agli sviluppatori di applicazioni o tester bitcoin di sperimentare, senza dover usare il reale Bitcoin."
 
 msgid "WARNING: UNTRUSTED CERTIFICATE"
 msgstr "ATTENZIONE: CERTIFICATO NON ATTENDIBILE"
@@ -2280,7 +2280,7 @@ msgid "You should not set a fee higher than {{maxFeeRecommended}} satoshis/byte.
 msgstr "Non è necessario impostare una commissione maggiore di {{maxFeeRecommended}} satoshis/byte."
 
 msgid "Your Archived Gift Cards"
-msgstr ""
+msgstr "Le tue carte regalo archiviate"
 
 msgid "Your BitPay Card is ready. Add funds to your card to start using it at stores and ATMs worldwide."
 msgstr "La carta BitPay è pronta. Aggiungi fondi alla tua carta per iniziare ad usarla presso i negozi e gli sportelli automatici in tutto il mondo."
