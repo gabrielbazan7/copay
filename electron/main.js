@@ -191,7 +191,7 @@ app.on('activate', () => {
   }
 });
 
-app.on('open-url', function(e, url) {
+app.on('open-url', function (e, url) {
   e.preventDefault();
   deeplinkingUrl = url;
   // Wait for main window to be ready
