@@ -1556,9 +1556,8 @@ export class WalletProvider {
     });
   }
 
-  public publishAndSignMultipleTxps(wallet, txps: any[]): Promise<any> {
+  public signMultipleTxps(wallet, txps: any[]): Promise<any> {
     [].concat(txps);
-    // Already published?
     const promises = [];
     return this.prepare(wallet).then(async (password: string) => {
       _.each(txps, txp => {
