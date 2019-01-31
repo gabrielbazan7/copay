@@ -1,6 +1,11 @@
 import { Component, NgZone } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, ModalController, NavController, Platform } from 'ionic-angular';
+import {
+  Events,
+  ModalController,
+  NavController,
+  Platform
+} from 'ionic-angular';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 
@@ -152,7 +157,6 @@ export class ProposalsPage {
       .getTxps({ limit: 50 })
       .then(txpsData => {
         this.zone.run(() => {
-
           // Check if txp were checked before
           txpsData.txps.forEach(txp => {
             txp.checked = _.indexOf(this.txpsToSign, txp) >= 0 ? true : false;
@@ -175,7 +179,7 @@ export class ProposalsPage {
     const map = new Map();
     const txpsByWallet: any[] = [];
 
-    txps.forEach((txp) => {
+    txps.forEach(txp => {
       const walletId = walletIdGetter(txp);
       const collection = map.get(walletId);
 
@@ -186,26 +190,27 @@ export class ProposalsPage {
       }
     });
     Array.from(map).forEach(txpsPerWallet => {
-      txpsByWallet.push(
-        {
-          walletId: txpsPerWallet[0],
-          txps: txpsPerWallet[1]
-        }
-      );
+      txpsByWallet.push({
+        walletId: txpsPerWallet[0],
+        txps: txpsPerWallet[1]
+      });
     });
     return txpsByWallet;
   }
 
   public signMultipleProposals(txp): void {
     this.txpsToSign = [];
-    this.walletIdSelectedToSign = this.walletIdSelectedToSign == txp.walletId ? null : txp.walletId;
+    this.walletIdSelectedToSign =
+      this.walletIdSelectedToSign == txp.walletId ? null : txp.walletId;
   }
 
   public sign(): void {
-    const wallet = this.txpsToSign[0].wallet ? this.txpsToSign[0].wallet : this.profileProvider.getWallet(this.txpsToSign[0].walletId)
+    const wallet = this.txpsToSign[0].wallet
+      ? this.txpsToSign[0].wallet
+      : this.profileProvider.getWallet(this.txpsToSign[0].walletId);
     this.walletProvider
       .publishAndSignMultipleTxps(wallet, this.txpsToSign)
-      .then((data) => {
+      .then(data => {
         // this.onGoingProcessProvider.clear();
         this.resetMultiSignValues();
         this.openFinishModal(data);
@@ -222,7 +227,7 @@ export class ProposalsPage {
   public txpSelectionChange(txp): void {
     if (_.indexOf(this.txpsToSign, txp) >= 0) {
       _.remove(this.txpsToSign, txpToSign => {
-        return txpToSign.id == txp.id
+        return txpToSign.id == txp.id;
       });
     } else {
       this.txpsToSign.push(txp);
@@ -237,9 +242,7 @@ export class ProposalsPage {
   private openFinishModal(data: any[]): void {
     const txpsAmount = data.length;
     const finishText: string = this.replaceParametersProvider.replace(
-      this.translate.instant(
-        '{{txpsAmount}} proposals signed'
-      ),
+      this.translate.instant('{{txpsAmount}} proposals signed'),
       { txpsAmount }
     );
     let modal = this.modalCtrl.create(
@@ -251,7 +254,9 @@ export class ProposalsPage {
   }
 
   private openFailedModal(err: string): void {
-    const finishText: string = this.translate.instant('Some of your proposals have failed');
+    const finishText: string = this.translate.instant(
+      'Some of your proposals have failed'
+    );
     let modal = this.modalCtrl.create(
       FinishModalPage,
       {
@@ -263,5 +268,4 @@ export class ProposalsPage {
     );
     modal.present();
   }
-
 }
