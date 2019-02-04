@@ -135,6 +135,22 @@ export class HomePage {
     this.subscribeIncomingDataMenuEvent();
     this.subscribeBwsEvents();
 
+    this.onResumeSubscription = this.plt.resume.subscribe(() => {
+      this.setWallets();
+      this.checkClipboard();
+      this.subscribeIncomingDataMenuEvent();
+      this.subscribeBwsEvents();
+      this.subscribeStatusEvents();
+      this.subscribeLocalTxAction();
+    });
+
+    this.onPauseSubscription = this.plt.pause.subscribe(() => {
+      this.events.unsubscribe('finishIncomingDataMenuEvent');
+      this.events.unsubscribe('bwsEvent');
+      this.events.unsubscribe('status:updated');
+      this.events.unsubscribe('Local/TxAction');
+    });
+
     // Show integrations
     const integrations = _.filter(this.homeIntegrationsProvider.get(), {
       show: true
@@ -177,32 +193,13 @@ export class HomePage {
     this.subscribeStatusEvents();
 
     this.subscribeLocalTxAction();
-
-    this.onResumeSubscription = this.plt.resume.subscribe(() => {
-      this.setWallets();
-      this.checkClipboard();
-      this.subscribeIncomingDataMenuEvent();
-      this.subscribeBwsEvents();
-      this.subscribeStatusEvents();
-      this.subscribeLocalTxAction();
-    });
-
-    this.onPauseSubscription = this.plt.pause.subscribe(() => {
-      this.events.unsubscribe('finishIncomingDataMenuEvent');
-      this.events.unsubscribe('bwsEvent');
-      this.events.unsubscribe('status:updated');
-      this.events.unsubscribe('Local/TxAction');
-    });
-  }
-
-  ngOnDestroy() {
-    this.onResumeSubscription.unsubscribe();
-    this.onPauseSubscription.unsubscribe();
   }
 
   ionViewWillLeave() {
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
+    this.onResumeSubscription.unsubscribe();
+    this.onPauseSubscription.unsubscribe();
     this.resetValuesForAnimationCard();
   }
 
@@ -618,6 +615,8 @@ export class HomePage {
       return;
     this.events.unsubscribe('finishIncomingDataMenuEvent');
     this.events.unsubscribe('bwsEvent');
+    this.onResumeSubscription.unsubscribe();
+    this.onPauseSubscription.unsubscribe();
     this.events.publish('OpenWallet', wallet);
   }
 

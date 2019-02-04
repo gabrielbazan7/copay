@@ -70,12 +70,8 @@ export class ProposalsPage {
   ionViewWillEnter() {
     this.updateAddressBook();
     this.updatePendingProposals();
-  }
-
-  ionViewDidLoad() {
     this.subscribeBwsEvents();
     this.subscribeLocalTxAction();
-
     this.onResumeSubscription = this.plt.resume.subscribe(() => {
       this.subscribeBwsEvents();
       this.subscribeLocalTxAction();
@@ -83,33 +79,36 @@ export class ProposalsPage {
 
     this.onPauseSubscription = this.plt.pause.subscribe(() => {
       this.events.unsubscribe('bwsEvent');
-      this.events.unsubscribe('Local/TxAction');
+      this.events.unsubscribe('Local/TxAction', this.localTxActionHandler);
     });
-
     // Update Wallet on Focus
     if (this.isElectron) {
       this.updateDesktopOnFocus();
     }
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() {
     this.events.unsubscribe('bwsEvent');
-    this.events.unsubscribe('Local/TxAction');
+    this.events.unsubscribe('Local/TxAction', this.localTxActionHandler);
     this.onResumeSubscription.unsubscribe();
     this.onPauseSubscription.unsubscribe();
   }
 
   private subscribeBwsEvents(): void {
     this.events.subscribe('bwsEvent', (walletId: string) => {
-      if (!this.updatingWalletId[walletId]) this.updateWallet({ walletId });
+      if (this.updatingWalletId[walletId]) return;
+      this.updateWallet({ walletId });
     });
   }
 
   private subscribeLocalTxAction(): void {
-    this.events.subscribe('Local/TxAction', opts => {
-      if (!this.updatingWalletId[opts.walletId]) this.updateWallet(opts);
-    });
+    this.events.subscribe('Local/TxAction', this.localTxActionHandler);
   }
+
+  private localTxActionHandler: any = opts => {
+    if (this.updatingWalletId[opts.walletId]) return;
+    this.updateWallet(opts);
+  };
 
   private updateDesktopOnFocus() {
     const { remote } = (window as any).require('electron');
@@ -252,11 +251,7 @@ export class ProposalsPage {
           );
           this.openModal(finishText, null, 'success');
         }
-        if (!this.updatingWalletId[wallet.id]) {
-          this.updateWallet({ walletId: wallet.id });
-        } else {
-          this.updatePendingProposals();
-        }
+        this.updateWallet({ walletId: wallet.id });
       })
       .catch(err => {
         this.logger.error('Sign multiple transaction proposals failed: ', err);
