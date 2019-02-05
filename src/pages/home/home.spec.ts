@@ -23,13 +23,13 @@ describe('HomePage', () => {
       };
       fixture.detectChanges();
     })));
-  afterEach(() => {
-    spyOn(instance, 'ngOnDestroy');
-    fixture.destroy();
-  });
 
   describe('Lifecycle Hooks', () => {
     describe('ionViewWillEnter', () => {
+      beforeEach(() => {
+        instance.plt.resume = new Subject();
+        instance.plt.pause = new Subject();
+      });
       describe('ionViewDidEnter', () => {
         it('should check clipboard', () => {
           const spy = spyOn(instance, 'checkClipboard');
@@ -46,13 +46,8 @@ describe('HomePage', () => {
           instance.ionViewDidEnter();
           expect(spy).toHaveBeenCalled();
         });
-      });
-
-      describe('ionViewDidLoad', () => {
         it('should update wallets on platform resume', () => {
-          instance.plt.resume = new Subject();
-          instance.plt.pause = new Subject();
-          instance.ionViewDidLoad();
+          instance.ionViewDidEnter();
           const setWalletsSpy = spyOn(instance, 'setWallets');
           instance.plt.resume.next();
           expect(setWalletsSpy).toHaveBeenCalled();
@@ -62,6 +57,7 @@ describe('HomePage', () => {
       describe('ionViewWillLeave', () => {
         it('should unsubscribe from bwsEvent event', () => {
           const spy = spyOn(instance.events, 'unsubscribe');
+          instance.ionViewDidEnter();
           instance.ionViewWillLeave();
           expect(spy).toHaveBeenCalledWith('bwsEvent');
         });
