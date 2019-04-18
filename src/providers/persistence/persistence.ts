@@ -53,7 +53,6 @@ const Keys = {
   HIDE_BALANCE: walletId => 'hideBalance-' + walletId,
   LAST_ADDRESS: walletId => 'lastAddress-' + walletId,
   LAST_CURRENCY_USED: 'lastCurrencyUsed',
-  ONBOARDING_COMPLETED: 'onboardingCompleted',
   PROFILE: 'profile',
   REMOTE_PREF_STORED: 'remotePrefStored',
   TX_CONFIRM_NOTIF: txid => 'txConfirmNotif-' + txid,
@@ -61,7 +60,7 @@ const Keys = {
   ORDER_WALLET: walletId => 'order-' + walletId,
   SERVER_MESSAGE_DISMISSED: messageId => 'serverMessageDismissed-' + messageId,
   SHAPESHIFT_TOKEN: network => 'shapeshiftToken-' + network,
-  VAULT: 'vault'
+  WALLET_GROUP: id => 'walletGroup-' + id
 };
 
 interface Storage {
@@ -105,20 +104,20 @@ export class PersistenceProvider {
     });
   }
 
-  storeVault(vault): Promise<void> {
-    return this.storage.set(Keys.VAULT, vault);
+  storeWalletGroup(walletGroup): Promise<void> {
+    return this.storage.set(Keys.WALLET_GROUP(walletGroup.id), walletGroup);
   }
 
-  getVault(): Promise<any> {
+  getWalletGroup(id: string): Promise<any> {
     return new Promise(resolve => {
-      this.storage.get(Keys.VAULT).then(vault => {
-        resolve(vault);
+      this.storage.get(Keys.WALLET_GROUP(id)).then(walletGroup => {
+        resolve(walletGroup);
       });
     });
   }
 
-  deleteVault() {
-    return this.storage.remove(Keys.VAULT);
+  deleteWalletGroup(id: string) {
+    return this.storage.remove(Keys.WALLET_GROUP(id));
   }
 
   setFeedbackInfo(feedbackValues: FeedbackValues) {
@@ -197,17 +196,9 @@ export class PersistenceProvider {
     return this.storage.set(Keys.AGREE_DISCLAIMER, true);
   }
 
-  setOnboardingCompleted() {
-    return this.storage.set(Keys.ONBOARDING_COMPLETED, true);
-  }
-
   // for compatibility
   getCopayDisclaimerFlag() {
     return this.storage.get(Keys.AGREE_DISCLAIMER);
-  }
-
-  getCopayOnboardingFlag() {
-    return this.storage.get(Keys.ONBOARDING_COMPLETED);
   }
 
   setRemotePrefsStoredFlag() {

@@ -6,9 +6,6 @@ import { Logger } from '../../../../../providers/logger/logger';
 import { ConfigProvider } from '../../../../../providers/config/config';
 import { ProfileProvider } from '../../../../../providers/profile/profile';
 
-// pages
-import { WalletExtendedPrivateKeyPage } from './wallet-extended-private-key/wallet-extended-private-key';
-
 import * as _ from 'lodash';
 
 @Component({
@@ -33,7 +30,6 @@ export class WalletInformationPage {
   public pubKeys;
   public externalSource: string;
   public canSign: boolean;
-  public needsBackup: boolean;
   private colorCounter = 1;
   private BLACK_WALLET_COLOR = '#202020';
 
@@ -70,8 +66,6 @@ export class WalletInformationPage {
     this.basePath = this.wallet.credentials.getBaseAddressDerivationPath();
     this.pubKeys = _.map(this.wallet.credentials.publicKeyRing, 'xPubKey');
     this.externalSource = null;
-    this.canSign = this.wallet.canSign();
-    this.needsBackup = this.wallet.needsBackup;
   }
 
   public saveBlack(): void {
@@ -92,11 +86,5 @@ export class WalletInformationPage {
       walletId: this.wallet.credentials.walletId
     });
     this.navCtrl.popToRoot();
-  }
-
-  public openWalletExtendedPrivateKey(): void {
-    this.navCtrl.push(WalletExtendedPrivateKeyPage, {
-      walletId: this.wallet.credentials.walletId
-    });
   }
 }

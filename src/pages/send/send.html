@@ -5,7 +5,7 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>{{wallet && wallet.name || ('Amount' | translate)}}</ion-title>
+    <ion-title>Account #{{wallet.credentials.account}}</ion-title>
   </ion-navbar>
   <ion-toolbar *ngIf="wallet" [navbar-bg]="wallet.color">
     <div *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-details-header__balance">

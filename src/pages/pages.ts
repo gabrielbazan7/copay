@@ -4,6 +4,7 @@ import { CopayersPage } from '../pages/add/copayers/copayers';
 import { CreateWalletPage } from '../pages/add/create-wallet/create-wallet';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
+import { NewWalletPage } from '../pages/add/new-wallet/new-wallet';
 import { SelectCurrencyPage } from '../pages/add/select-currency/select-currency';
 import { BackupGamePage } from '../pages/backup/backup-game/backup-game';
 import { BackupKeyPage } from '../pages/backup/backup-key/backup-key';
@@ -77,21 +78,23 @@ import { LanguagePage } from '../pages/settings/language/language';
 import { LockPage } from '../pages/settings/lock/lock';
 import { NotificationsPage } from '../pages/settings/notifications/notifications';
 import { SharePage } from '../pages/settings/share/share';
-import { VaultDeletePage } from '../pages/settings/vault-delete/vault-delete';
+import { WalletGroupSettingsPage } from '../pages/settings/wallet-group-settings/wallet-group-settings';
+
+/* Wallet Group Settings */
+import { WalletExportPage } from '../pages/settings/wallet-group-settings/wallet-export/wallet-export';
+import { WalletExtendedPrivateKeyPage } from '../pages/settings/wallet-group-settings/wallet-extended-private-key/wallet-extended-private-key';
+import { WalletGroupDeletePage } from '../pages/settings/wallet-group-settings/wallet-group-delete/wallet-group-delete';
+import { WalletNamePage } from '../pages/settings/wallet-group-settings/wallet-name/wallet-name';
+import { WalletServiceUrlPage } from '../pages/settings/wallet-group-settings/wallet-service-url/wallet-service-url';
 
 /* Wallet Settings */
 import { WalletColorPage } from '../pages/settings/wallet-settings/wallet-color/wallet-color';
-import { WalletNamePage } from '../pages/settings/wallet-settings/wallet-name/wallet-name';
 import { WalletSettingsPage } from '../pages/settings/wallet-settings/wallet-settings';
 
 /* Wallet Advanced Settings */
 import { AllAddressesPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/all-addresses/all-addresses';
 import { WalletAddressesPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-addresses/wallet-addresses';
-import { WalletDeletePage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-delete/wallet-delete';
-import { WalletExportPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-export/wallet-export';
-import { WalletExtendedPrivateKeyPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-information/wallet-extended-private-key/wallet-extended-private-key';
 import { WalletInformationPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-information/wallet-information';
-import { WalletServiceUrlPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-service-url/wallet-service-url';
 import { WalletTransactionHistoryPage } from '../pages/settings/wallet-settings/wallet-settings-advanced/wallet-transaction-history/wallet-transaction-history';
 
 /* Send */
@@ -170,6 +173,7 @@ export const PAGES = [
   ShapeshiftPage,
   ShapeshiftShiftPage,
   NotificationsPage,
+  NewWalletPage,
   FeePolicyPage,
   SearchTxModalPage,
   SessionLogPage,
@@ -179,8 +183,9 @@ export const PAGES = [
   TxpDetailsPage,
   TxDetailsPage,
   TxpPage,
-  VaultDeletePage,
+  WalletGroupDeletePage,
   WalletSettingsPage,
+  WalletGroupSettingsPage,
   WalletNamePage,
   WalletColorPage,
   WalletInformationPage,
@@ -188,7 +193,6 @@ export const PAGES = [
   WalletExportPage,
   WalletServiceUrlPage,
   WalletTransactionHistoryPage,
-  WalletDeletePage,
   WalletExtendedPrivateKeyPage,
   WalletDetailsPage,
   WalletTabsChild,
