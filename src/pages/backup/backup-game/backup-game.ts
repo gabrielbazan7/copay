@@ -29,8 +29,7 @@ export class BackupGamePage {
   @ViewChild(Navbar)
   navBar: Navbar;
 
-  private isVaultWallet: boolean;
-  private vault;
+  private walletGroup;
 
   public mnemonicWords: string[];
   public shuffledMnemonicWords;
@@ -59,11 +58,7 @@ export class BackupGamePage {
     this.keys = this.navParams.data.keys;
     this.walletId = this.navParams.data.walletId;
     this.wallet = this.profileProvider.getWallet(this.walletId);
-    this.vault = this.profileProvider.getVault();
-    this.isVaultWallet =
-      this.vault &&
-      this.vault.walletIds &&
-      this.vault.walletIds.includes(this.wallet.credentials.walletId);
+    this.walletGroup = this.profileProvider.getWalletGroup(this.walletId);
     this.setFlow();
   }
 
@@ -147,7 +142,7 @@ export class BackupGamePage {
   }
 
   private confirm(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const customWordList = _.map(this.customWords, 'word');
 
       if (!_.isEqual(this.mnemonicWords, customWordList)) {
@@ -181,16 +176,14 @@ export class BackupGamePage {
         }
       }
 
-      if (this.isVaultWallet) {
-        const vaultWallets = this.profileProvider.getVaultWallets();
-        vaultWallets.forEach(wallet => {
-          this.profileProvider.setBackupFlag(wallet.credentials.walletId);
-        });
-        this.vault.needsBackup = false;
-        this.profileProvider.storeVault(this.vault);
-      } else {
-        this.profileProvider.setBackupFlag(this.wallet.credentials.walletId);
-      }
+      const groupWallets = await this.profileProvider.getGroupWallets(
+        this.walletId
+      );
+      groupWallets.forEach(wallet => {
+        this.profileProvider.setBackupFlag(wallet.credentials.walletId);
+      });
+      this.walletGroup.needsBackup = false;
+      this.profileProvider.storeWalletGroup(this.walletGroup);
 
       return resolve();
     });

@@ -219,9 +219,9 @@ export class CopayApp {
       .catch((err: Error) => {
         this.logger.warn('LoadAndBindProfile', err.message);
         this.rootPage =
-          err.message == 'ONBOARDINGNONCOMPLETED: Onboarding non completed'
-            ? OnboardingPage
-            : DisclaimerPage;
+          err.message == 'NONAGREEDDISCLAIMER: Non agreed disclaimer'
+            ? DisclaimerPage
+            : TabsPage;
       });
   }
 

@@ -46,6 +46,7 @@ export class CreateWalletPage implements OnInit {
   private derivationPathByDefault: string;
   private derivationPathForTestnet: string;
 
+  public walletGroupId: string;
   public copayers: number[];
   public signatures: number[];
   public showAdvOpts: boolean;
@@ -79,6 +80,7 @@ export class CreateWalletPage implements OnInit {
     this.isShared = this.navParams.get('isShared');
     this.coin = this.navParams.get('coin');
     this.defaults = this.configProvider.getDefaults();
+    this.walletGroupId = this.navParams.data.walletGroupId;
     this.tc = this.isShared ? this.defaults.wallet.totalCopayers : 1;
     this.copayers = _.range(2, this.defaults.limits.totalCopayers + 1);
     this.derivationPathByDefault =
@@ -101,6 +103,13 @@ export class CreateWalletPage implements OnInit {
       singleAddress: [false],
       coin: [null, Validators.required]
     });
+    if (this.walletGroupId) {
+      this.profileProvider
+        .getWalletGroup(this.walletGroupId)
+        .then(walletGroup => {
+          this.createForm.controls['walletName'].setValue(walletGroup.name);
+        });
+    }
     this.createForm.controls['coin'].setValue(this.coin);
     this.createLabel =
       this.coin === 'btc'
@@ -130,6 +139,10 @@ export class CreateWalletPage implements OnInit {
     this.createForm.controls['requiredCopayers'].setValue(
       Math.min(Math.trunc(n / 2 + 1), maxReq)
     );
+  }
+
+  public readOnly() {
+    return !!this.walletGroupId;
   }
 
   private updateSeedSourceSelect(): void {
@@ -261,16 +274,16 @@ export class CreateWalletPage implements OnInit {
 
   private create(opts): void {
     this.onGoingProcessProvider.set('creatingWallet');
-    const promise = this.createForm.value.addToVault
-      ? this.profileProvider.createWalletInVault(opts)
-      : this.profileProvider.createNewSeedWallet(opts);
-    promise
+    this.profileProvider
+      .createWallet(this.walletGroupId, opts)
       .then(wallet => {
         this.onGoingProcessProvider.clear();
+        this.events.publish('status:updated');
         this.walletProvider.updateRemotePreferences(wallet);
         this.pushNotificationsProvider.updateSubscription(wallet);
         this.setBackupFlagIfNeeded(wallet.credentials.walletId);
-        this.setFingerprintIfNeeded(wallet.credentials.walletId);
+        this.setFingerprintIfNeeded();
+        this.navCtrl.popToRoot();
         this.navCtrl.popToRoot().then(() => {
           setTimeout(() => {
             this.events.publish('OpenWallet', wallet);
@@ -293,21 +306,22 @@ export class CreateWalletPage implements OnInit {
       });
   }
 
-  private setBackupFlagIfNeeded(walletId: string) {
+  private async setBackupFlagIfNeeded(walletId: string) {
     if (this.createForm.value.selectedSeed == 'set') {
       this.profileProvider.setBackupFlag(walletId);
-    } else if (this.createForm.value.addToVault) {
-      const vault = this.profileProvider.getVault();
-      if (!vault.needsBackup) this.profileProvider.setBackupFlag(walletId);
+    } else {
+      const id = this.walletGroupId || walletId;
+      const walletGroup = await this.profileProvider.getWalletGroup(id);
+      if (walletGroup && !walletGroup.needsBackup)
+        this.profileProvider.setBackupFlag(id);
     }
   }
 
-  private async setFingerprintIfNeeded(walletId: string) {
-    if (!this.createForm.value.addToVault) return;
-    const vaultWallets = this.profileProvider.getVaultWallets();
+  private async setFingerprintIfNeeded() {
+    if (!this.walletGroupId) return;
     const config = this.configProvider.get();
     const touchIdEnabled = config.touchIdFor
-      ? config.touchIdFor[vaultWallets[0].credentials.walletId]
+      ? config.touchIdFor[this.walletGroupId]
       : null;
 
     if (!touchIdEnabled) return;
@@ -315,7 +329,7 @@ export class CreateWalletPage implements OnInit {
     const opts = {
       touchIdFor: {}
     };
-    opts.touchIdFor[walletId] = true;
+    opts.touchIdFor[this.walletGroupId] = true;
     this.configProvider.set(opts);
   }
 
