@@ -86,7 +86,6 @@ export interface Config {
   emailFor?: any;
   bwsFor?: any;
   aliasFor?: any;
-  colorFor?: any;
   touchIdFor?: any;
 
   log: {
@@ -97,6 +96,11 @@ export interface Config {
     btc: string;
     bch: string;
   };
+
+  defaultColor: {
+    btc: string;
+    bch: string;
+  }
 }
 
 @Injectable()
@@ -202,6 +206,11 @@ export class ConfigProvider {
       blockExplorerUrl: {
         btc: 'insight.bitcore.io/#/BTC/',
         bch: 'insight.bitcore.io/#/BCH/'
+      },
+
+      defaultColor: {
+        btc: '#F5A623',
+        bch: '#53C726'
       }
     };
   }
@@ -234,11 +243,11 @@ export class ConfigProvider {
 
     this.logger.debug(
       'Config | spendUnconfirmed: ' +
-        spendUnconfirmed +
-        ' - useLegacyAddress: ' +
-        useLegacyAddress +
-        ' - lockMethod: ' +
-        lockMethod
+      spendUnconfirmed +
+      ' - useLegacyAddress: ' +
+      useLegacyAddress +
+      ' - lockMethod: ' +
+      lockMethod
     );
   }
 

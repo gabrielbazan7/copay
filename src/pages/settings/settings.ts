@@ -6,7 +6,6 @@ import { Logger } from '../../providers/logger/logger';
 import * as _ from 'lodash';
 
 // providers
-import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { ConfigProvider } from '../../providers/config/config';
@@ -16,10 +15,8 @@ import { LanguageProvider } from '../../providers/language/language';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
 import { TouchIdProvider } from '../../providers/touchid/touchid';
-import { WalletProvider } from '../../providers/wallet/wallet';
 
 // pages
-import { BackupKeyPage } from '../backup/backup-key/backup-key';
 import { BitPayCardIntroPage } from '../integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { BitPaySettingsPage } from '../integrations/bitpay-card/bitpay-settings/bitpay-settings';
 import { CoinbaseSettingsPage } from '../integrations/coinbase/coinbase-settings/coinbase-settings';
@@ -35,7 +32,7 @@ import { LanguagePage } from './language/language';
 import { LockPage } from './lock/lock';
 import { NotificationsPage } from './notifications/notifications';
 import { SharePage } from './share/share';
-import { VaultDeletePage } from './vault-delete/vault-delete';
+import { WalletGroupSettingsPage } from './wallet-group-settings/wallet-group-settings';
 import { WalletSettingsPage } from './wallet-settings/wallet-settings';
 
 @Component({
@@ -55,13 +52,8 @@ export class SettingsPage {
   public integrationServices = [];
   public bitpayCardItems = [];
   public showBitPayCard: boolean = false;
-  public vault;
-  public encryptEnabled: boolean;
-  public touchIdAvailable: boolean;
-  public touchIdEnabled: boolean;
-  public touchIdPrevValue: boolean;
-
-  private vaultWallets;
+  public walletGroup;
+  public walletGroups;
 
   constructor(
     private navCtrl: NavController,
@@ -76,10 +68,7 @@ export class SettingsPage {
     private platformProvider: PlatformProvider,
     private translate: TranslateService,
     private modalCtrl: ModalController,
-    private touchid: TouchIdProvider,
-    private walletProvider: WalletProvider,
-    private actionSheetProvider: ActionSheetProvider,
-    private touchIdProvider: TouchIdProvider
+    private touchid: TouchIdProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.walletsBch = [];
@@ -101,88 +90,14 @@ export class SettingsPage {
     this.walletsBch = this.profileProvider.getWallets({
       coin: 'bch'
     });
+    this.profileProvider.getAllWalletsGroups().then(walletGroups => {
+      this.walletGroups = _.compact(walletGroups);
+    });
     this.config = this.configProvider.get();
     this.selectedAlternative = {
       name: this.config.wallet.settings.alternativeName,
       isoCode: this.config.wallet.settings.alternativeIsoCode
     };
-    this.lockMethod =
-      this.config && this.config.lock && this.config.lock.method
-        ? this.config.lock.method.toLowerCase()
-        : null;
-    this.vault = this.profileProvider.getVault();
-    this.vaultWallets = this.profileProvider.getVaultWallets();
-    this.encryptEnabled = this.walletProvider.isEncrypted(this.vaultWallets[0]);
-    this.touchIdEnabled = this.config.touchIdFor
-      ? this.config.touchIdFor[this.vaultWallets[0].credentials.walletId]
-      : null;
-    this.touchIdPrevValue = this.touchIdEnabled;
-    this.touchIdProvider.isAvailable().then((isAvailable: boolean) => {
-      this.touchIdAvailable = isAvailable;
-    });
-  }
-
-  public touchIdChange(): void {
-    if (this.touchIdPrevValue == this.touchIdEnabled) return;
-    const newStatus = this.touchIdEnabled;
-    this.walletProvider
-      .setTouchId(this.vaultWallets, newStatus)
-      .then(() => {
-        this.touchIdPrevValue = this.touchIdEnabled;
-        this.logger.debug('Touch Id status changed: ' + newStatus);
-      })
-      .catch(err => {
-        this.logger.error('Error with fingerprint:', err);
-        this.touchIdEnabled = this.touchIdPrevValue;
-      });
-  }
-
-  public encryptChange(): void {
-    const val = this.encryptEnabled;
-
-    if (val && !this.walletProvider.isEncrypted(this.vaultWallets[0])) {
-      this.logger.debug('Encrypting private key for vault: ', this.vault.name);
-      this.walletProvider
-        .encrypt(this.vaultWallets)
-        .then(() => {
-          this.vaultWallets.forEach(wallet => {
-            this.profileProvider.updateCredentials(JSON.parse(wallet.export()));
-          });
-          this.logger.debug('Vault wallets encrypted');
-        })
-        .catch(err => {
-          this.encryptEnabled = false;
-          const title = this.translate.instant('Could not encrypt wallet');
-          this.showErrorInfoSheet(err, title);
-        });
-    } else if (!val && this.walletProvider.isEncrypted(this.vaultWallets[0])) {
-      this.walletProvider
-        .decrypt(this.vaultWallets)
-        .then(() => {
-          this.vaultWallets.forEach(wallet => {
-            this.profileProvider.updateCredentials(JSON.parse(wallet.export()));
-          });
-          this.logger.debug('Vault wallets decrypted');
-        })
-        .catch(err => {
-          this.encryptEnabled = true;
-          const title = 'Could not decrypt vault wallets';
-          this.showErrorInfoSheet(err, title);
-        });
-    }
-  }
-
-  private showErrorInfoSheet(
-    err: Error | string,
-    infoSheetTitle: string
-  ): void {
-    if (!err) return;
-    this.logger.warn('Could not encrypt/decrypt vault wallets:', err);
-    const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'default-error',
-      { msg: err, title: infoSheetTitle }
-    );
-    errorInfoSheet.present();
   }
 
   ionViewDidEnter() {
@@ -222,11 +137,8 @@ export class SettingsPage {
     this.navCtrl.push(AboutPage);
   }
 
-  public openBackupSettings(): void {
-    const vaultWallet = this.profileProvider.getWallet(this.vault.walletIds[0]);
-    this.navCtrl.push(BackupKeyPage, {
-      walletId: vaultWallet.credentials.walletId
-    });
+  public openWalletGroupSettings(walletGroupId): void {
+    this.navCtrl.push(WalletGroupSettingsPage, { walletGroupId });
   }
 
   public openLockPage(): void {
@@ -285,10 +197,6 @@ export class SettingsPage {
     this.navCtrl.push(GiftCardsSettingsPage);
   }
 
-  public openDeleteVault(): void {
-    this.navCtrl.push(VaultDeletePage);
-  }
-
   public openHelpExternalLink(): void {
     const url =
       this.appName == 'Copay'
@@ -331,23 +239,5 @@ export class SettingsPage {
     this.touchid.check().then(() => {
       this.navCtrl.push(LockPage);
     });
-  }
-
-  public openSupportEncryptPassword(): void {
-    const url =
-      'https://support.bitpay.com/hc/en-us/articles/360000244506-What-Does-a-Spending-Password-Do-';
-    const optIn = true;
-    const title = null;
-    const message = this.translate.instant('Read more in our support page');
-    const okText = this.translate.instant('Open');
-    const cancelText = this.translate.instant('Go Back');
-    this.externalLinkProvider.open(
-      url,
-      optIn,
-      title,
-      message,
-      okText,
-      cancelText
-    );
   }
 }
