@@ -14,7 +14,6 @@ import { Coin, WalletProvider } from '../../../providers/wallet/wallet';
 import { AmountPage } from '../amount/amount';
 
 export interface FlatWallet {
-  color: string;
   name: string;
   recipientType: 'wallet';
   coin: Coin;
@@ -153,7 +152,6 @@ export class TransferToPage {
 
   private flattenWallet(wallet): FlatWallet {
     return {
-      color: wallet.color,
       name: wallet.name,
       recipientType: 'wallet',
       coin: wallet.coin,
@@ -261,7 +259,6 @@ export class TransferToPage {
           toAddress: addr,
           name: item.name,
           email: item.email,
-          color: item.color,
           coin: item.coin,
           network: item.network
         });

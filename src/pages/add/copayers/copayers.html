@@ -1,5 +1,5 @@
 <ion-header class="wallet-details-header">
-  <ion-navbar [navbar-bg]="wallet.color">
+  <ion-navbar>
     <ion-buttons left>
       <button class="modal-close-button" (click)="close()" ion-button>
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -12,7 +12,7 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-  <ion-toolbar *ngIf="!wallet.notAuthorized && secret" [navbar-bg]="wallet.color">
+  <ion-toolbar *ngIf="!wallet.notAuthorized && secret">
     <div class="wallet-details-header__subtitle">{{ 'Share this invitation with your copayers' | translate }}</div>
   </ion-toolbar>
 </ion-header>
@@ -20,8 +20,7 @@
 <ion-content no-bounce>
   <div class="qr-container" *ngIf="!wallet.notAuthorized && secret">
     <div class="card qr-card">
-      <ngx-qrcode (click)="showFullInfo()" class="qr-code" hide-toast="true" copy-to-clipboard="{{ secret }}" qrc-value="{{secret}}"
-        qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
+      <ngx-qrcode (click)="showFullInfo()" class="qr-code" hide-toast="true" copy-to-clipboard="{{ secret }}" qrc-value="{{secret}}" qrc-class="aclass" qrc-errorCorrectionLevel="L"></ngx-qrcode>
     </div>
   </div>
   <ion-list>
