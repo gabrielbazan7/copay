@@ -63,10 +63,7 @@ export class HomePage {
   public slideDown: boolean;
 
   public showRateCard: boolean;
-  public showReorderBtc: boolean;
-  public showReorderBch: boolean;
 
-  public showReorderGroupWallets: boolean;
   public showIntegration;
   public hideHomeIntegrations: boolean;
   public showGiftCards: boolean;
@@ -105,9 +102,9 @@ export class HomePage {
   ) {
     this.slideDown = false;
     this.isElectron = this.platformProvider.isElectron;
-    this.showReorderBtc = false;
-    this.showReorderBch = false;
+
     this.isCopay = this.appProvider.info.name === 'copay';
+
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.events.subscribe('Home/reloadStatus', () => {
       this._willEnter(true);
@@ -742,19 +739,6 @@ export class HomePage {
 
   public goToWalletDetails(wallet, params): void {
     this.events.publish('OpenWallet', wallet, params);
-  }
-
-  public reorderGroup(): void {
-    this.showReorderGroupWallets = !this.showReorderGroupWallets;
-  }
-
-  public reorderGroupWallets(indexes, wallets): void {
-    const element = wallets[indexes.from];
-    wallets.splice(indexes.from, 1);
-    wallets.splice(indexes.to, 0, element);
-    _.each(wallets, (wallet, index: number) => {
-      this.profileProvider.setWalletOrder(wallet.id, index);
-    });
   }
 
   public openProposalsPage(): void {
