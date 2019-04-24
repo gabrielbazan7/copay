@@ -199,10 +199,10 @@ export class ImportWalletPage {
 
     setTimeout(() => {
       this.profileProvider
-        .importWallet(str2, opts)
-        .then(wallet => {
+        .importWalletGroupFile(str2, opts)
+        .then(wallets => {
           this.onGoingProcessProvider.clear();
-          this.finish([].concat(wallet));
+          this.finish(wallets);
         })
         .catch(err => {
           this.onGoingProcessProvider.clear();
@@ -213,7 +213,7 @@ export class ImportWalletPage {
     }, 100);
   }
 
-  private async finish(wallets) {
+  private finish(wallets) {
     wallets.forEach(wallet => {
       this.walletProvider.updateRemotePreferences(wallet);
       this.profileProvider.setBackupFlag(wallet.credentials.walletId);
@@ -248,7 +248,7 @@ export class ImportWalletPage {
     this.onGoingProcessProvider.set('importingWallet');
     setTimeout(() => {
       this.profileProvider
-        .importWalletGroup(words, opts)
+        .importWalletGroupMnemonic(words, opts)
         .then(wallets => {
           this.onGoingProcessProvider.clear();
           this.finish(wallets);
