@@ -103,29 +103,41 @@
         </ion-list>
       </div>
 
-
       <ion-item-divider *ngIf="walletGroups">
-        Wallets
+        <div>
+          {{'Wallets' | translate}}
+        </div>
+        <div class="title-buttons" item-end *ngIf="!showReorderWallets">
+          <button ion-button clear icon-only color="grey" (click)="showReorderWallets = !showReorderWallets" *ngIf="walletGroups.length > 1">
+            <ion-icon name="reorder"></ion-icon>
+          </button>
+        </div>
+        <div item-end *ngIf="showReorderWallets">
+          <button ion-button clear color="secondary" (click)="showReorderWallets = !showReorderWallets">
+            {{'Done' | translate}}
+          </button>
+        </div>
       </ion-item-divider>
 
-      <button ion-item *ngFor="let walletGroup of walletGroups" (click)="openWalletGroupSettings(walletGroup.id)">
-        <ion-icon item-start>
-          <img src="assets/img/icon-wallet.svg" class="icon-wallet" />
-        </ion-icon>
-        <span>{{walletGroup.name}}</span>
-      </button>
+      <ion-list [reorder]="showReorderWallets" (ionItemReorder)="reorderGroupWallets($event)">
+        <button ion-item *ngFor="let walletGroup of walletGroups | orderBy : ['order']" (click)="openWalletGroupSettings(walletGroup.id)">
+          <ion-icon item-start>
+            <img src="assets/img/icon-wallet.svg" class="icon-wallet" />
+          </ion-icon>
+          <span>{{walletGroup.name}}</span>
+        </button>
+      </ion-list>
 
       <ion-item-divider *ngIf="integrationServices && integrationServices[0]">
         {{'Integrations' | translate}}
       </ion-item-divider>
 
-      <button ion-item *ngFor="let integration of integrationServices | orderBy : ['title']"
-        (click)="openSettingIntegration(integration.name)">
+      <button ion-item *ngFor="let integration of integrationServices | orderBy : ['title']" (click)="openSettingIntegration(integration.name)">
         <ion-icon class="item-img" item-start>
           <img src="{{integration.icon}}" class="icon-services" />
         </ion-icon>
         <span>{{integration.title}}</span>
-        <ion-note item-end *ngIf="integration.linked">
+        <ion-note item-end>
           <span *ngIf="integration.linked" translate>Linked</span>
           <span *ngIf="!integration.linked">
             {{integration.show ? ('On'|translate) : ('Off'|translate)}}
@@ -136,19 +148,18 @@
       <ion-item-divider>{{'More' | translate}}</ion-item-divider>
 
       <button ion-item (click)="openAdvancedPage()">
-        <ion-icon class="item-img settings-icon" item-start>
+        <ion-icon class="item-img" item-start>
           <img src="assets/img/settings-icons/icon-advanced.svg" width="22">
         </ion-icon>
         <span translate>Advanced</span>
       </button>
 
       <button ion-item (click)="openAboutPage()">
-        <ion-icon class="item-img settings-icon" item-start>
-          <img src="assets/img/settings-icons/icon-info.svg" width="22">
+        <ion-icon class="item-img" item-start>
+          <img src="assets/img/settings-icons/icon-about.svg" width="22">
         </ion-icon>
         <span translate>About</span> {{appName}}
       </button>
       <ion-item-divider></ion-item-divider>
     </ion-list>
-  </div>
-</wide-header-page>
+    </ion-content>
