@@ -53,7 +53,7 @@ export class TxDetailsPage {
     private walletProvider: WalletProvider,
     private walletTabsProvider: WalletTabsProvider,
     private translate: TranslateService
-  ) { }
+  ) {}
 
   ionViewDidLoad() {
     this.config = this.configProvider.get();

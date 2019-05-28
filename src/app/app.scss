@@ -529,7 +529,7 @@ button.modal-close-button {
 }
 
 // Add padding bottom when item has label
-ion-item.with-label.item {
+button.with-label.item,ion-item.with-label.item {
   padding-bottom: 10px;
 
   &.item-ios,

@@ -1,20 +1,48 @@
 page-wallet-group-settings {
-  .assertive {
-    color: color($colors, danger);
-    ion-label {
-      white-space: inherit;
+  ion-label,
+  .item-title {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    box-orient: vertical;
+    -webkit-box-orient: vertical;
+  }
+
+  .item-without-title {
+    margin-top: 0;
+  }
+
+  .settings-list {
+    .item {
+      border: 0;
+    }
+
+    ion-item.item,
+    button.item {
+      padding: 12px 0 12px 22px;
+      border-bottom: 0;
+
+      .item-inner {
+        margin-left: 8px;
+
+        ion-note.note {
+          background: #f4f5fb;
+          color: #565d6d;
+          font-weight: 300;
+          padding: 6px 10px;
+          border-radius: 4px;
+        }
+      }
+
+      &:last-child {
+        &:after {
+          width: 100%;
+        }
+      }
     }
   }
-  .item-text {
-    font-size: 12.5px;
-  }
-  .settings-color-block {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    float: left;
-    margin: 1rem;
-    background-color: color($colors, primary);
-  }
+
 }

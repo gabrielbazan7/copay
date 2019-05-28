@@ -107,16 +107,6 @@
         <div>
           {{'Wallets' | translate}}
         </div>
-        <div class="title-buttons" item-end *ngIf="!showReorderWallets">
-          <button ion-button clear icon-only color="grey" (click)="showReorderWallets = !showReorderWallets" *ngIf="walletGroups.length > 1">
-            <ion-icon name="reorder"></ion-icon>
-          </button>
-        </div>
-        <div item-end *ngIf="showReorderWallets">
-          <button ion-button clear color="secondary" (click)="showReorderWallets = !showReorderWallets">
-            {{'Done' | translate}}
-          </button>
-        </div>
       </ion-item-divider>
 
       <ion-list [reorder]="showReorderWallets" (ionItemReorder)="reorderGroupWallets($event)">
@@ -162,4 +152,5 @@
       </button>
       <ion-item-divider></ion-item-divider>
     </ion-list>
-    </ion-content>
+  </div>
+</wide-header-page>

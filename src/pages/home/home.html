@@ -99,8 +99,21 @@
 
     <ion-list style="margin-top: 20px;" *ngIf="wallets && wallets.length">
       <div class="section-header" *ngIf="!isCopay" translate>Wallets</div>
-      <div class="wallets-list">
-        <wallet-item *ngFor="let wallet of wallets" class="sliding-container" [wallet]="wallet" (action)="onWalletAction($event)"></wallet-item>
+      <div class="card" *ngFor="let walletGroup of walletGroups  | orderBy : ['order']">
+        <ion-item-divider>
+          <div class="title wallets-list-title" item-start>
+            <div translate>{{walletGroup.name}}</div>
+            <!-- <span class="wallet-warning" *ngIf="!wallet.isComplete()" translate>
+                Incomplete
+              </span>TODO  -->
+            <div class="wallet-warning" *ngIf="walletGroup.needsBackup" translate>
+              Needs Backup
+            </div>
+          </div>
+        </ion-item-divider>
+        <div class="wallets-list">
+          <wallet-item *ngFor="let wallet of walletGroup.wallets" class="sliding-container" [wallet]="wallet" (action)="onWalletAction($event)"></wallet-item>
+        </div>
       </div>
     </ion-list>
 

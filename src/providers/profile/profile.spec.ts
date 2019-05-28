@@ -1,4 +1,4 @@
-import { Events } from 'ionic-angular';
+/* import { Events } from 'ionic-angular';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
@@ -1446,4 +1446,4 @@ describe('Profile Provider', () => {
       expect(replaceSpy).toHaveBeenCalledTimes(1);
     });
   });
-});
+}); */

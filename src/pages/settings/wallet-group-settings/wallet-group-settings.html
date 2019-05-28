@@ -1,12 +1,12 @@
 <wide-header-page title="{{'Wallet Preferences' | translate}}">
   <div page-content>
     <ion-list class="settings-list">
-      <ion-item-divider></ion-item-divider>
+      <ion-item-divider class="item-without-title"></ion-item-divider>
       <button ion-item (click)="openWalletName()">
-        <div translate float-left>Name</div>
-        <div text-end text-wrap ion-text color="light-grey">
+        <span translate>Name</span>
+        <ion-note item-end>
           {{walletGroup && walletGroup.name}}
-        </div>
+        </ion-note>
       </button>
       <button ion-item (click)="openBackupSettings()" [ngClass]="{warn: walletGroup?.needsBackup}">
         <span translate>Backup</span>
@@ -43,8 +43,9 @@
         <span>Wallet Service URL</span>
       </button>
 
+      <ion-item-divider class="item-without-title"></ion-item-divider>
+
       <div *ngIf="!needsBackup && canSign">
-        <ion-item-divider></ion-item-divider>
         <button ion-item (click)="openWalletExtendedPrivateKey()">
           <span translate>Extended Private Key</span>
         </button>

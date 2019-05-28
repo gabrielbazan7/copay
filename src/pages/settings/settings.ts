@@ -52,7 +52,6 @@ export class SettingsPage {
   public showBitPayCard: boolean = false;
   public walletGroup;
   public walletGroups;
-  public showReorderWallets: boolean;
 
   constructor(
     private navCtrl: NavController,
@@ -71,7 +70,6 @@ export class SettingsPage {
   ) {
     this.appName = this.app.info.nameCase;
     this.isCordova = this.platformProvider.isCordova;
-    this.showReorderWallets = false;
   }
 
   ionViewDidLoad() {
@@ -230,23 +228,6 @@ export class SettingsPage {
   private checkFingerprint(): void {
     this.touchid.check().then(() => {
       this.navCtrl.push(LockPage);
-    });
-  }
-
-  public reorderGroupWallets(indexes): void {
-    const element = this.walletGroups[indexes.from];
-    this.walletGroups.splice(indexes.from, 1);
-    this.walletGroups.splice(indexes.to, 0, element);
-    const promises = [];
-    _.each(this.walletGroups, (walletGroup, index: number) => {
-      promises.push(
-        this.profileProvider.setWalletGroupOrder(walletGroup.id, index)
-      );
-    });
-    Promise.all(promises).then(() => {
-      this.profileProvider.getAllWalletsGroups().then(walletGroups => {
-        this.walletGroups = _.compact(walletGroups);
-      });
     });
   }
 }
