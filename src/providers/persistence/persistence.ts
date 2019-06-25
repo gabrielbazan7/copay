@@ -66,7 +66,8 @@ const Keys = {
   SERVER_MESSAGE_DISMISSED: messageId => 'serverMessageDismissed-' + messageId,
   SHAPESHIFT_TOKEN: network => 'shapeshiftToken-' + network,
   PRICE_CHART: 'priceChart',
-  WALLET_GROUP: 'walletGroup'
+  WALLET_GROUP: 'walletGroup',
+  WALLET_GROUP_NAME: keyId => 'walletGroupName-' + keyId
 };
 
 interface Storage {
@@ -543,6 +544,18 @@ export class PersistenceProvider {
 
   removeWalletGroupOrder(keyId: string) {
     return this.storage.remove(Keys.ORDER_WALLET_GROUP(keyId));
+  }
+
+  setWalletGroupName(keyId: string, name: string) {
+    return this.storage.set(Keys.WALLET_GROUP_NAME(keyId), name);
+  }
+
+  getWalletGroupName(keyId: string) {
+    return this.storage.get(Keys.WALLET_GROUP_NAME(keyId));
+  }
+
+  removeWalletGroupName(keyId: string) {
+    return this.storage.remove(Keys.WALLET_GROUP_NAME(keyId));
   }
 
   setActiveWGKey(keyId: string) {
