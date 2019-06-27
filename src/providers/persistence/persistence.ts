@@ -66,7 +66,6 @@ const Keys = {
   SERVER_MESSAGE_DISMISSED: messageId => 'serverMessageDismissed-' + messageId,
   SHAPESHIFT_TOKEN: network => 'shapeshiftToken-' + network,
   PRICE_CHART: 'priceChart',
-  WALLET_GROUP: 'walletGroup',
   WALLET_GROUP_NAME: keyId => 'walletGroupName-' + keyId
 };
 
@@ -121,14 +120,6 @@ export class PersistenceProvider {
 
   getKeys() {
     return this.storage.get(Keys.KEYS);
-  }
-
-  storeWalletGroup(walletGroup): Promise<void> {
-    return this.storage.set(Keys.WALLET_GROUP, walletGroup);
-  }
-
-  getWalletGroup(): Promise<any> {
-    return this.storage.get(Keys.WALLET_GROUP);
   }
 
   setFeedbackInfo(feedbackValues: FeedbackValues) {
@@ -347,6 +338,12 @@ export class PersistenceProvider {
     this.removeTxHistory(walletId);
     this.clearBackupFlag(walletId);
     this.removeWalletOrder(walletId);
+  }
+
+  removeAllWalletGroupData(keyId: string) {
+    this.removeWalletGroupName(keyId);
+    this.clearBackupGroupFlag(keyId);
+    this.removeWalletGroupOrder(keyId);
   }
 
   getActiveGiftCards(network: Network) {
