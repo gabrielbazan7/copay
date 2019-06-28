@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar class="home-header">
-    <ion-buttons left class="add-button">
+    <ion-buttons left class="add-button" *ngIf="selectedWalletGroup && !selectedWalletGroup.isDeletedSeed">
       <button ion-button clear (click)="goToAddView()" *ngIf="wallets && wallets[0]" [ngClass]="{copay: appProvider.info.name === 'copay'}">
         <img src="assets/img/plus.svg" />
       </button>
