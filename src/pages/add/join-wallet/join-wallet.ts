@@ -278,9 +278,9 @@ export class JoinWalletPage {
           );
         }
         this.navCtrl.popToRoot().then(() => {
+          this.keyProvider.setActiveWGKey(wallet.credentials.keyId);
+          this.events.publish('Local/WalletListChange');
           setTimeout(() => {
-            this.keyProvider.setActiveWGKey(wallet.credentials.keyId);
-            this.events.publish('Home/reloadStatus');
             this.events.publish('OpenWallet', wallet);
           }, 1000);
         });

@@ -227,7 +227,7 @@ export class ImportWalletPage {
       this.importForm.value.walletName
     );
     this.keyProvider.setActiveWGKey(wallets[0].credentials.keyId);
-    this.events.publish('Home/reloadStatus');
+    this.events.publish('Local/WalletListChange');
     this.navCtrl.popToRoot();
   }
 
