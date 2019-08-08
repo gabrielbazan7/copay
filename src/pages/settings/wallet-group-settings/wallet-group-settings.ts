@@ -59,7 +59,8 @@ export class WalletGroupSettingsPage {
     this.walletsGroup = this.profileProvider.getWalletGroup(this.keyId);
     this.wallets = this.profileProvider.getWallets({
       keyId: this.keyId,
-      showHidden: true
+      showHidden: true,
+      sortByOrder: true
     });
     this.canSign = this.walletsGroup.canSign;
     this.needsBackup = this.walletsGroup.needsBackup;

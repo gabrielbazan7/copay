@@ -1398,6 +1398,12 @@ export class ProfileProvider {
 
     let ret = _.values(this.wallet);
 
+    if (opts.noReadOnly) {
+      ret = _.filter(ret, x => {
+        return x.credentials.keyId && x.credentials.keyId != 'read-only';
+      });
+    }
+
     if (opts.keyId === 'read-only') {
       ret = _.filter(ret, x => {
         return !x.credentials.keyId;
@@ -1469,7 +1475,28 @@ export class ProfileProvider {
       });
     }
 
-    return _.sortBy(ret, 'order');
+    if (opts.sortByOrder) {
+      return _.sortBy(ret, 'order');
+    } else {
+      return ret;
+    }
+  }
+
+  public getOrderedWalletsGroups(opts?): any[] {
+    const wallets: any[] = this.getWallets(opts);
+    const groupedWallets = _.groupBy(wallets, 'keyId');
+    const walletsGroups = _.values(groupedWallets);
+    let orderedWalletGroup: any[] = [];
+
+    walletsGroups.forEach(walletGroup => {
+      orderedWalletGroup.push(
+        _.sortBy(walletGroup, wallet => {
+          return wallet.order;
+        })
+      );
+    });
+
+    return orderedWalletGroup;
   }
 
   public toggleHideBalanceFlag(walletId: string): void {
