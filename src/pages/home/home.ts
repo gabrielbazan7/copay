@@ -340,14 +340,13 @@ export class HomePage {
     },100);
     */
 
-    this.wallets = this.profileProvider.getWallets({ sortByOrder: true });
-    this.readOnlyWalletsGroup = _.filter(this.wallets, wallet => {
-      return wallet.keyId == 'read-only';
+    this.wallets = this.profileProvider.getWallets({ noReadOnly: true });
+    this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
+      keyId: 'read-only'
     });
 
-    this.walletsGroups = this.profileProvider.getOrderedWalletsGroups({
-      noReadOnly: true
-    });
+    this.walletsGroups = _.values(_.groupBy(this.wallets, 'keyId'));
+
     this.allowMultiplePrimaryWallets =
       this.profileProvider.isMultiplePrimaryEnabled() ||
       this.walletsGroups.length > 1;
