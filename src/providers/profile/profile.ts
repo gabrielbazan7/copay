@@ -1392,6 +1392,15 @@ export class ProfileProvider {
   }
 
   public getWallets(opts?) {
+    const wallets = [];
+    Object.keys(this.walletsGroups).forEach(keyId => {
+      opts.keyId = keyId;
+      wallets.push(this.getWalletsFromGroup(opts));
+    });
+    return _.flatten(wallets);
+  }
+
+  public getWalletsFromGroup(opts?) {
     if (opts && !_.isObject(opts)) throw new Error('bad argument');
 
     opts = opts || {};
@@ -1400,7 +1409,7 @@ export class ProfileProvider {
 
     if (opts.noReadOnly) {
       ret = _.filter(ret, x => {
-        return x.credentials.keyId && x.credentials.keyId != 'read-only';
+        return x.credentials.keyId;
       });
     }
 
@@ -1475,28 +1484,7 @@ export class ProfileProvider {
       });
     }
 
-    if (opts.sortByOrder) {
-      return _.sortBy(ret, 'order');
-    } else {
-      return ret;
-    }
-  }
-
-  public getOrderedWalletsGroups(opts?): any[] {
-    const wallets: any[] = this.getWallets(opts);
-    const groupedWallets = _.groupBy(wallets, 'keyId');
-    const walletsGroups = _.values(groupedWallets);
-    let orderedWalletGroup: any[] = [];
-
-    walletsGroups.forEach(walletGroup => {
-      orderedWalletGroup.push(
-        _.sortBy(walletGroup, wallet => {
-          return wallet.order;
-        })
-      );
-    });
-
-    return orderedWalletGroup;
+    return _.sortBy(ret, 'order');
   }
 
   public toggleHideBalanceFlag(walletId: string): void {

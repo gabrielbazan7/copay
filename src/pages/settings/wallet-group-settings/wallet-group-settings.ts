@@ -57,10 +57,9 @@ export class WalletGroupSettingsPage {
 
   ionViewWillEnter() {
     this.walletsGroup = this.profileProvider.getWalletGroup(this.keyId);
-    this.wallets = this.profileProvider.getWallets({
+    this.wallets = this.profileProvider.getWalletsFromGroup({
       keyId: this.keyId,
-      showHidden: true,
-      sortByOrder: true
+      showHidden: true
     });
     this.canSign = this.walletsGroup.canSign;
     this.needsBackup = this.walletsGroup.needsBackup;

@@ -163,7 +163,7 @@ export class ConfirmCardPurchasePage extends ConfirmPage {
     this.navCtrl.swipeBackEnabled = false;
 
     this.network = this.giftCardProvider.getNetwork();
-    this.wallets = this.profileProvider.getOrderedWalletsGroups({
+    this.wallets = this.profileProvider.getWallets({
       onlyComplete: true,
       network: this.network,
       hasFunds: true

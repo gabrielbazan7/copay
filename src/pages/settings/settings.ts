@@ -88,7 +88,8 @@ export class SettingsPage {
     const opts = {
       showHidden: true
     };
-    this.walletsGroups = this.profileProvider.getOrderedWalletsGroups(opts);
+    const wallets = this.profileProvider.getWallets(opts);
+    this.walletsGroups = _.values(_.groupBy(wallets, 'keyId'));
 
     this.config = this.configProvider.get();
     this.selectedAlternative = {
