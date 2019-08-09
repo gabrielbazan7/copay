@@ -340,12 +340,19 @@ export class HomePage {
     },100);
     */
 
-    this.wallets = this.profileProvider.getWallets({ noReadOnly: true });
+    this.wallets = this.profileProvider.getWallets();
+    this.walletsGroups = _.values(
+      _.groupBy(
+        _.filter(this.wallets, wallet => {
+          return wallet.keyId != 'read-only';
+        }),
+        'keyId'
+      )
+    );
+
     this.readOnlyWalletsGroup = this.profileProvider.getWalletsFromGroup({
       keyId: 'read-only'
     });
-
-    this.walletsGroups = _.values(_.groupBy(this.wallets, 'keyId'));
 
     this.allowMultiplePrimaryWallets =
       this.profileProvider.isMultiplePrimaryEnabled() ||

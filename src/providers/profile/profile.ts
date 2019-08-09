@@ -270,7 +270,7 @@ export class ProfileProvider {
           return;
         }
         wallet.setNotificationsInterval(this.UPDATE_PERIOD);
-        wallet.openWallet(() => {});
+        wallet.openWallet(() => { });
       }
     );
     this.events.subscribe('Local/ConfigUpdate', opts => {
@@ -321,7 +321,7 @@ export class ProfileProvider {
       date = new Date(Number(groupBackupInfo.timestamp));
     this.logger.info(
       `Binding wallet: ${wallet.id} - Backed up: ${!needsBackup} ${
-        date ? date : ''
+      date ? date : ''
       } - Encrypted: ${wallet.isPrivKeyEncrypted}`
     );
     return Promise.resolve(true);
@@ -723,8 +723,8 @@ export class ProfileProvider {
           const mergeAddressBook = _.merge(addressBook, localAddressBook);
           this.persistenceProvider
             .setAddressBook(
-              wallet.credentials.network,
-              JSON.stringify(mergeAddressBook)
+            wallet.credentials.network,
+            JSON.stringify(mergeAddressBook)
             )
             .then(() => {
               return resolve();
@@ -1393,6 +1393,7 @@ export class ProfileProvider {
 
   public getWallets(opts?) {
     const wallets = [];
+    opts = opts || {};
     Object.keys(this.walletsGroups).forEach(keyId => {
       opts.keyId = keyId;
       wallets.push(this.getWalletsFromGroup(opts));
@@ -1406,12 +1407,6 @@ export class ProfileProvider {
     opts = opts || {};
 
     let ret = _.values(this.wallet);
-
-    if (opts.noReadOnly) {
-      ret = _.filter(ret, x => {
-        return x.credentials.keyId;
-      });
-    }
 
     if (opts.keyId === 'read-only') {
       ret = _.filter(ret, x => {
