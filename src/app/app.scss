@@ -688,8 +688,7 @@ ion-item.with-label.item {
   }
 }
 
-page-bitpay-card,
-.wallet-details-header {
+page-bitpay-card {
   @include toolbar-button-color(white);
 
   ion-title .toolbar-title {

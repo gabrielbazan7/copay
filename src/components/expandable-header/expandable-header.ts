@@ -12,14 +12,14 @@ import { ThemeProvider } from '../../providers/theme/theme';
   template: '<ng-content></ng-content>'
 })
 export class ExpandableHeaderPrimaryComponent {
-  constructor(public element: ElementRef) {}
+  constructor(public element: ElementRef) { }
 }
 @Component({
   selector: 'expandable-header-footer',
   template: '<ng-content></ng-content>'
 })
 export class ExpandableHeaderFooterComponent {
-  constructor(public element: ElementRef) {}
+  constructor(public element: ElementRef) { }
 }
 @Component({
   selector: 'expandable-header',
@@ -54,11 +54,14 @@ export class ExpandableHeaderComponent {
    */
   headerHeight: number;
 
+  @Input()
+  noGradient: boolean = false;
+
   constructor(
     public element: ElementRef,
     public renderer: Renderer,
     private themeProvider: ThemeProvider
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.disableFade) {
@@ -126,17 +129,20 @@ export class ExpandableHeaderComponent {
         transformStr
       );
 
-    backColorGradient = this.calculateBackColorGradient(opacity);
+    if (!this.noGradient) {
+      backColorGradient = this.calculateBackColorGradient(opacity);
 
-    const linearGradient = `linear-gradient(180deg, ${
-      this.theme.walletDetailsBackgroundStart
-    } ${backColorGradient}% , ${this.theme.walletDetailsBackgroundEnd})`;
+      const linearGradient = `linear-gradient(180deg, ${
+        this.theme.walletDetailsBackgroundStart
+        } ${backColorGradient}% , ${this.theme.walletDetailsBackgroundEnd})`;
 
-    this.renderer.setElementStyle(
-      this.element.nativeElement,
-      'background-image',
-      linearGradient
-    );
+
+      this.renderer.setElementStyle(
+        this.element.nativeElement,
+        'background-image',
+        linearGradient
+      );
+    }
   }
 
   calculateBackColorGradient(opacity: number): number {
