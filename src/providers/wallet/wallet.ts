@@ -887,7 +887,10 @@ export class WalletProvider {
       // no future transactions...
       if (tx.time > now) tx.time = now;
 
-      if (tx.confirmations === 0) {
+      if (
+        tx.confirmations === 0 &&
+        this.currencyProvider.isUtxoCoin(wallet.coin)
+      ) {
         const coins = await this.getCoinsForTx(wallet, tx.txid);
         tx.isRBF = _.some(coins.inputs, input => {
           return (
