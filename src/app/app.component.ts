@@ -49,28 +49,17 @@ import { AdvertisingComponent } from '../components/advertising/advertising';
 // Pages
 import { HttpClient } from '@angular/common/http';
 import { CARD_IAB_CONFIG } from '../constants';
-import { AddWalletPage } from '../pages/add-wallet/add-wallet';
 import { CopayersPage } from '../pages/add/copayers/copayers';
-import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
-import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
-import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
-import { PhaseOneCardIntro } from '../pages/integrations/bitpay-card/bitpay-card-phases/phase-one/phase-one-intro-page/phase-one-intro-page';
-import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
-import { SelectInvoicePage } from '../pages/integrations/invoice/select-invoice/select-invoice';
-import { ShapeshiftPage } from '../pages/integrations/shapeshift/shapeshift';
-import { SimplexPage } from '../pages/integrations/simplex/simplex';
-import { SimplexBuyPage } from '../pages/integrations/simplex/simplex-buy/simplex-buy';
-import { WyrePage } from '../pages/integrations/wyre/wyre';
 import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
-import { PaperWalletPage } from '../pages/paper-wallet/paper-wallet';
 import { PinModalPage } from '../pages/pin/pin-modal/pin-modal';
 import { AmountPage } from '../pages/send/amount/amount';
-import { ConfirmPage } from '../pages/send/confirm/confirm';
-import { AddressbookAddPage } from '../pages/settings/addressbook/add/add';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
+
+import { PAGES } from '../pages/pages';
+
 // As the handleOpenURL handler kicks in before the App is started,
 // declare the handler function at the top of app.component.ts (outside the class definition)
 // to track the passed Url
@@ -96,25 +85,7 @@ export class CopayApp {
   private isCopayerModalOpen: boolean;
   private copayerModal: any;
 
-  private pageMap = {
-    AddressbookAddPage,
-    AmountPage,
-    BitPayCardIntroPage,
-    PhaseOneCardIntro,
-    CoinbasePage,
-    ConfirmPage,
-    CopayersPage,
-    ImportWalletPage,
-    JoinWalletPage,
-    AddWalletPage,
-    PaperWalletPage,
-    ShapeshiftPage,
-    SimplexBuyPage,
-    SimplexPage,
-    SelectInvoicePage,
-    WalletDetailsPage,
-    WyrePage
-  };
+  private pageMap = PAGES;
 
   constructor(
     private config: Config,

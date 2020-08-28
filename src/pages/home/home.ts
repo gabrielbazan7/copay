@@ -237,10 +237,7 @@ export class HomePage {
     if (link.startsWith('page:')) {
       let pageArray = link.split(':');
       let pageTitle = pageArray[1];
-      if (pageTitle in this.pagesMap) {
-        linkTo = this.pagesMap[pageTitle];
-        return linkTo;
-      }
+      linkTo = pageTitle;
     } else if (link.startsWith('https://')) {
       linkTo = link;
     }
@@ -642,6 +639,11 @@ export class HomePage {
   public goTo(page, params: any = {}) {
     if (typeof page === 'string' && page.indexOf('https://') === 0) {
       this.externalLinkProvider.open(page);
+    } else if (typeof page === 'string') {
+      let nextView = {
+        name: page
+      };
+      this.events.publish('IncomingDataRedir', nextView);
     } else {
       this.navCtrl.push(page, params);
     }
