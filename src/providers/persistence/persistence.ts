@@ -3,6 +3,7 @@ import { File } from '@ionic-native/file';
 import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
+import { BwcProvider } from '../../providers/bwc/bwc';
 import { GiftCard } from '../gift-card/gift-card.types';
 import { PlatformProvider } from '../platform/platform';
 import { FileStorage } from './storage/file-storage';
@@ -101,7 +102,8 @@ export class PersistenceProvider {
   constructor(
     private logger: Logger,
     private platform: PlatformProvider,
-    private file: File
+    private file: File,
+    private bwcProvider: BwcProvider
   ) {
     this.logger.debug('PersistenceProvider initialized');
   }
@@ -141,11 +143,22 @@ export class PersistenceProvider {
   }
 
   setKeys(keys: any[]) {
-    return this.storage.set(Keys.KEYS, keys);
+    const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
+    const sjcl = this.bwcProvider.getSJCL();
+    const encryptedKeys = sjcl.encrypt(encryptingKey, JSON.stringify(keys));
+    return this.storage.set(Keys.KEYS, encryptedKeys);
   }
 
   getKeys() {
-    return this.storage.get(Keys.KEYS);
+    return this.storage.get(Keys.KEYS).then(encryptedKeys => {
+      if (!encryptedKeys) return Promise.resolve();
+      const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
+      const sjcl = this.bwcProvider.getSJCL();
+      const keys = JSON.parse(
+        sjcl.decrypt(encryptingKey, JSON.stringify(encryptedKeys))
+      );
+      return Promise.resolve(keys);
+    });
   }
 
   setFeedbackInfo(feedbackValues: FeedbackValues) {

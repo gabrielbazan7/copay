@@ -4,13 +4,19 @@ import { IonicImageLoader } from 'ionic-image-loader';
 import { MarkdownModule } from 'ngx-markdown';
 import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 
-import { CUSTOM_ELEMENTS_SCHEMA, ErrorHandler, NgModule } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ErrorHandler,
+  NgModule
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   Config,
   IonicApp,
   IonicErrorHandler,
-  IonicModule
+  IonicModule,
+  Platform
 } from 'ionic-angular';
 
 /* Modules */
@@ -60,8 +66,11 @@ import { COMPONENTS } from '../components/components';
 
 /* Providers */
 import { LanguageLoader } from '../providers/language-loader/language-loader';
+import { FileStorage } from '../providers/persistence/storage/file-storage';
+import { LocalStorage } from '../providers/persistence/storage/local-storage';
 import { ProvidersModule } from '../providers/providers.module';
 
+import BWC from 'bitcore-wallet-client';
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -142,10 +151,46 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
     },
-    FormatCurrencyPipe
+    FormatCurrencyPipe,
+    FileStorage,
+    LocalStorage,
+    Platform,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: encryptKeys,
+      deps: [FileStorage, LocalStorage, Platform],
+      multi: true
+    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(public config: Config) {}
+  constructor(public config: Config) { }
+}
+
+export function encryptKeys(
+  fileStorage: FileStorage,
+  localStorage: LocalStorage,
+  platform: Platform
+) {
+  return (): Promise<any> => {
+    const storage = platform.is('cordova') ? fileStorage : localStorage;
+    return storage.get('keys').then(keys => {
+      if (!keys) return Promise.resolve();
+      var encryptingKey1 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // old encrypt key
+      var decryptedKeys;
+      try {
+        decryptedKeys = BWC.sjcl.decrypt(encryptingKey1, JSON.stringify(keys));
+      } catch (err) {
+        console.log('Not yet encrypted?');
+        decryptedKeys = keys;
+      }
+      var encryptingKey2 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // new version encrypt key
+      var encryptedKeys = BWC.sjcl.encrypt(
+        encryptingKey2,
+        JSON.stringify(decryptedKeys)
+      );
+      return storage.set('keys', encryptedKeys);
+    });
+  };
 }
