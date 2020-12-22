@@ -88,7 +88,7 @@ const Keys = {
   TEMP_MDES_CERT_ONLY_DEBUG_FLAG: 'tempMdesCertOnlyDebugFlag'
 };
 
-interface Storage {
+export interface Storage {
   get(k: string): Promise<any>;
   set(k: string, v): Promise<void>;
   remove(k: string): Promise<void>;
@@ -109,9 +109,10 @@ export class PersistenceProvider {
   }
 
   public load() {
-    this.storage = this.platform.isCordova
-      ? new FileStorage(this.file, this.logger)
-      : new LocalStorage(this.logger);
+    if (!this.storage)
+      this.storage = this.platform.isCordova
+        ? new FileStorage(this.file, this.logger)
+        : new LocalStorage(this.logger);
   }
 
   storeProfileLegacy(profileOld) {

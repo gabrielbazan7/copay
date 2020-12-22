@@ -1,22 +1,22 @@
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicImageLoader } from 'ionic-image-loader';
-import { MarkdownModule } from 'ngx-markdown';
-import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
-
 import {
   APP_INITIALIZER,
   CUSTOM_ELEMENTS_SCHEMA,
   ErrorHandler,
   NgModule
 } from '@angular/core';
+
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IonicImageLoader } from 'ionic-image-loader';
+import { MarkdownModule } from 'ngx-markdown';
+import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
+
 import { BrowserModule } from '@angular/platform-browser';
 import {
   Config,
   IonicApp,
   IonicErrorHandler,
-  IonicModule,
-  Platform
+  IonicModule
 } from 'ionic-angular';
 
 /* Modules */
@@ -66,11 +66,9 @@ import { COMPONENTS } from '../components/components';
 
 /* Providers */
 import { LanguageLoader } from '../providers/language-loader/language-loader';
-import { FileStorage } from '../providers/persistence/storage/file-storage';
-import { LocalStorage } from '../providers/persistence/storage/local-storage';
 import { ProvidersModule } from '../providers/providers.module';
+import { AppInitService } from '../providers/app-init/app-init.service';
 
-import BWC from 'bitcore-wallet-client';
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -152,45 +150,17 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       useClass: IonicErrorHandler
     },
     FormatCurrencyPipe,
-    FileStorage,
-    LocalStorage,
-    Platform,
+    AppInitService,
     {
       provide: APP_INITIALIZER,
-      useFactory: encryptKeys,
-      deps: [FileStorage, LocalStorage, Platform],
+      useFactory: (appInitService: AppInitService) => () => appInitService.Init(),
+      deps: [AppInitService],
       multi: true
     }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(public config: Config) { }
-}
-
-export function encryptKeys(
-  fileStorage: FileStorage,
-  localStorage: LocalStorage,
-  platform: Platform
-) {
-  return (): Promise<any> => {
-    const storage = platform.is('cordova') ? fileStorage : localStorage;
-    return storage.get('keys').then(keys => {
-      if (!keys) return Promise.resolve();
-      var encryptingKey1 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // old encrypt key
-      var decryptedKeys;
-      try {
-        decryptedKeys = BWC.sjcl.decrypt(encryptingKey1, JSON.stringify(keys));
-      } catch (err) {
-        console.log('Not yet encrypted?');
-        decryptedKeys = keys;
-      }
-      var encryptingKey2 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // new version encrypt key
-      var encryptedKeys = BWC.sjcl.encrypt(
-        encryptingKey2,
-        JSON.stringify(decryptedKeys)
-      );
-      return storage.set('keys', encryptedKeys);
-    });
-  };
+  constructor(public config: Config) {
+  }
 }
