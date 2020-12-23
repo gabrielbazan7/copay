@@ -31,10 +31,10 @@ export class KeyEncryptProvider {
         const encryptingKey1 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // old encryption key
         let decryptedKeys;
         try {
-          decryptedKeys = BWC.sjcl.decrypt(
+          decryptedKeys = JSON.parse(BWC.sjcl.decrypt(
             encryptingKey1,
             JSON.stringify(keys)
-          );
+          ));
         } catch (err) {
           this.logger.debug(`KeyEncryptProvider - Not yet encrypted?`);
           decryptedKeys = keys;

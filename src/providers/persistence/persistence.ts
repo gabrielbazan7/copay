@@ -155,9 +155,7 @@ export class PersistenceProvider {
       if (!encryptedKeys) return Promise.resolve();
       const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
       const sjcl = this.bwcProvider.getSJCL();
-      const keys = JSON.parse(
-        sjcl.decrypt(encryptingKey, JSON.stringify(encryptedKeys))
-      );
+      const keys = sjcl.decrypt(encryptingKey, JSON.stringify(encryptedKeys));
       return Promise.resolve(keys);
     });
   }
