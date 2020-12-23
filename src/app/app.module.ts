@@ -1,15 +1,15 @@
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IonicImageLoader } from 'ionic-image-loader';
+import { MarkdownModule } from 'ngx-markdown';
+import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
+
 import {
   APP_INITIALIZER,
   CUSTOM_ELEMENTS_SCHEMA,
   ErrorHandler,
   NgModule
 } from '@angular/core';
-
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicImageLoader } from 'ionic-image-loader';
-import { MarkdownModule } from 'ngx-markdown';
-import { NgxTextOverflowClampModule } from 'ngx-text-overflow-clamp';
 
 import { BrowserModule } from '@angular/platform-browser';
 import {
@@ -65,9 +65,9 @@ import { WideHeaderBarButton } from '../pages/templates/wide-header-page/wide-he
 import { COMPONENTS } from '../components/components';
 
 /* Providers */
+import { KeyEncryptProvider } from '../providers/key-encrypt/key-encrypt';
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
-import { AppInitService } from '../providers/app-init/app-init.service';
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -150,17 +150,17 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       useClass: IonicErrorHandler
     },
     FormatCurrencyPipe,
-    AppInitService,
+    KeyEncryptProvider,
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInitService: AppInitService) => () => appInitService.Init(),
-      deps: [AppInitService],
+      useFactory: (KeyEncryptProvider: KeyEncryptProvider) => () =>
+        KeyEncryptProvider.init(),
+      deps: [KeyEncryptProvider],
       multi: true
     }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(public config: Config) {
-  }
+  constructor(public config: Config) {}
 }
