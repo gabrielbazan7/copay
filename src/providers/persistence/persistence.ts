@@ -147,7 +147,7 @@ export class PersistenceProvider {
     const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
     const sjcl = this.bwcProvider.getSJCL();
     const encryptedKeys = sjcl.encrypt(encryptingKey, JSON.stringify(keys));
-    return this.storage.set(Keys.KEYS, encryptedKeys);
+    return this.storage.set(Keys.KEYS, JSON.parse(encryptedKeys));
   }
 
   getKeys() {
@@ -156,7 +156,7 @@ export class PersistenceProvider {
       const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
       const sjcl = this.bwcProvider.getSJCL();
       const keys = sjcl.decrypt(encryptingKey, JSON.stringify(encryptedKeys));
-      return Promise.resolve(keys);
+      return Promise.resolve(JSON.parse(keys));
     });
   }
 

@@ -31,20 +31,18 @@ export class KeyEncryptProvider {
         const encryptingKey1 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // old encryption key
         let decryptedKeys;
         try {
-          decryptedKeys = JSON.parse(BWC.sjcl.decrypt(
+          decryptedKeys = BWC.sjcl.decrypt(
             encryptingKey1,
             JSON.stringify(keys)
-          ));
+          );
         } catch (err) {
           this.logger.debug(`KeyEncryptProvider - Not yet encrypted?`);
-          decryptedKeys = keys;
+          decryptedKeys = JSON.stringify(keys);
         }
         const encryptingKey2 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // new encrypt key
-        const encryptedKeys = BWC.sjcl.encrypt(
-          encryptingKey2,
-          JSON.stringify(decryptedKeys)
-        );
-        await storage.set('keys', encryptedKeys);
+        const encryptedKeys = BWC.sjcl.encrypt(encryptingKey2, decryptedKeys);
+
+        await storage.set('keys', JSON.parse(encryptedKeys));
         this.logger.debug(`KeyEncryptProvider - encrypted and saved`);
         return resolve();
       }, 500);
