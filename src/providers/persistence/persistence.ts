@@ -3,6 +3,8 @@ import { File } from '@ionic-native/file';
 import * as _ from 'lodash';
 import { Logger } from '../../providers/logger/logger';
 
+import { ENC_KYS } from '../../constants';
+
 import { BwcProvider } from '../../providers/bwc/bwc';
 import { GiftCard } from '../gift-card/gift-card.types';
 import { PlatformProvider } from '../platform/platform';
@@ -144,7 +146,7 @@ export class PersistenceProvider {
   }
 
   setKeys(keys: any[]) {
-    const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
+    const encryptingKey = ENC_KYS[0];
     const sjcl = this.bwcProvider.getSJCL();
     const encryptedKeys = sjcl.encrypt(encryptingKey, JSON.stringify(keys));
     return this.storage.set(Keys.KEYS, JSON.parse(encryptedKeys));
@@ -153,7 +155,7 @@ export class PersistenceProvider {
   getKeys() {
     return this.storage.get(Keys.KEYS).then(encryptedKeys => {
       if (!encryptedKeys) return Promise.resolve();
-      const encryptingKey = 'asdfghjklpoiuytrewqazxcvbnjskawq';
+      const encryptingKey = ENC_KYS[0];
       const sjcl = this.bwcProvider.getSJCL();
       const keys = sjcl.decrypt(encryptingKey, JSON.stringify(encryptedKeys));
       return Promise.resolve(JSON.parse(keys));

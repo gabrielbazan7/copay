@@ -6,6 +6,7 @@ import { Logger } from '../logger/logger';
 import { FileStorage } from '../persistence/storage/file-storage';
 import { LocalStorage } from '../persistence/storage/local-storage';
 
+import { ENC_KYS } from '../../constants';
 @Injectable()
 export class KeyEncryptProvider {
   constructor(
@@ -28,18 +29,8 @@ export class KeyEncryptProvider {
           this.logger.debug(`KeyEncryptProvider - no keys`);
           return resolve();
         }
-        const encryptingKey1 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // old encryption key
-        let decryptedKeys;
-        try {
-          decryptedKeys = BWC.sjcl.decrypt(
-            encryptingKey1,
-            JSON.stringify(keys)
-          );
-        } catch (err) {
-          this.logger.debug(`KeyEncryptProvider - Not yet encrypted?`);
-          decryptedKeys = JSON.stringify(keys);
-        }
-        const encryptingKey2 = 'asdfghjklpoiuytrewqazxcvbnjskawq'; // new encrypt key
+        let decryptedKeys = this.tryDescryptKeys(JSON.stringify(keys));
+        const encryptingKey2 = ENC_KYS[0]; // new encrypt key
         const encryptedKeys = BWC.sjcl.encrypt(encryptingKey2, decryptedKeys);
 
         await storage.set('keys', JSON.parse(encryptedKeys));
@@ -47,5 +38,23 @@ export class KeyEncryptProvider {
         return resolve();
       }, 500);
     });
+  }
+
+  tryDescryptKeys(keys: string) {
+    let decryptedKeys;
+    ENC_KYS.every(value => {
+      // this.logger.debug(`Trying with ${index}:${value}`);
+      try {
+        decryptedKeys = BWC.sjcl.decrypt(value, keys);
+        // this.logger.debug(` #### >>> Decrypted with ${index}:${value}`);
+        return false; // break;
+      } catch {
+        return true; // continue;
+      }
+    });
+    // if (!decryptedKeys) {
+    //   this.logger.debug(` #### >>> Not yet encrypted? ${decryptedKeys}`);
+    // }
+    return decryptedKeys || keys;
   }
 }
