@@ -12,6 +12,7 @@ import {
   TranslateModule
 } from '@ngx-translate/core';
 import { Events, Platform } from 'ionic-angular';
+import { BwcProvider } from '../../providers/bwc/bwc';
 import { ConfigProvider } from '../../providers/config/config';
 import { CurrencyProvider } from '../../providers/currency/currency';
 import { LanguageProvider } from '../../providers/language/language';
@@ -48,6 +49,7 @@ describe('AppProvider', () => {
         PersistenceProvider,
         PlatformProvider,
         ThemeProvider,
+        BwcProvider,
         Platform,
         File,
         StatusBar,
