@@ -1,6 +1,6 @@
 import { File } from '@ionic-native/file';
 import { Logger } from '../../providers/logger/logger';
-import { BwcProvider } from '../bwc/bwc';
+import { KeyEncryptProvider } from '../key-encrypt/key-encrypt';
 import { PlatformProvider } from '../platform/platform';
 import { PersistenceProvider } from './persistence';
 
@@ -8,6 +8,7 @@ class FileMock extends File {}
 
 describe('Persistence Provider', () => {
   let persistenceProvider: PersistenceProvider;
+  let keyEncryptProvider: KeyEncryptProvider;
   let logs;
 
   const loggerMock = {
@@ -20,7 +21,6 @@ describe('Persistence Provider', () => {
   } as Logger;
   const platformMock = {} as PlatformProvider;
   const fileMock = new FileMock();
-  const bwcProvider = {} as BwcProvider;
 
   beforeEach(() => {
     logs = [];
@@ -31,7 +31,7 @@ describe('Persistence Provider', () => {
       loggerMock,
       platformMock,
       fileMock,
-      bwcProvider
+      keyEncryptProvider
     );
     persistenceProvider.load();
   }
