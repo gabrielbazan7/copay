@@ -108,6 +108,10 @@ export class KeyEncryptProvider {
   }
 
   public encryptKeys(keys): string {
+    if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+      this.logger.debug('encryptKeys - no encrypting keys');
+      return JSON.stringify(keys);
+    }
     const encryptingKey = this.STORAGE_ENCRYPTING_KEYS[
       this.STORAGE_ENCRYPTING_KEYS.length - 1
     ];
@@ -124,6 +128,10 @@ export class KeyEncryptProvider {
   }
 
   public decryptKeys(encryptedKeys): string {
+    if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+      this.logger.debug('decryptKeys - no encrypting keys');
+      return JSON.stringify(encryptedKeys);
+    }
     const encryptingKey = this.STORAGE_ENCRYPTING_KEYS[
       this.STORAGE_ENCRYPTING_KEYS.length - 1
     ];
