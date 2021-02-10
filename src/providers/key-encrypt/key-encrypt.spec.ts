@@ -4,11 +4,12 @@ import { Logger } from '../logger/logger';
 import { LocalStorage } from '../persistence/storage/local-storage';
 import { KeyEncryptProvider } from './key-encrypt';
 
-describe('KeyEncryptProvider', () => {
+fdescribe('KeyEncryptProvider', () => {
   let keyEncryptProvider: KeyEncryptProvider;
   let localStorage: LocalStorage;
   let logger: Logger;
   let loggerSpy;
+  let loggerErrSpy;
 
   beforeEach(async () => {
     const testBed = TestUtils.configureProviderTestingModule();
@@ -16,6 +17,7 @@ describe('KeyEncryptProvider', () => {
     localStorage = testBed.get(LocalStorage);
     logger = testBed.get(Logger);
     loggerSpy = spyOn(logger, 'debug');
+    loggerErrSpy = spyOn(logger, 'error');
   });
 
   describe('Init function', () => {
@@ -29,6 +31,20 @@ describe('KeyEncryptProvider', () => {
       );
       expect(loggerSpy).toHaveBeenCalledWith('KeyEncryptProvider - no keys');
       expect(loggerSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('should run init without errors if no encrypting keys found and not modified any key', async () => {
+      keyEncryptProvider.STORAGE_ENCRYPTING_KEYS = [];
+      await localStorage.set('keys', { key: 'key1' });
+      await keyEncryptProvider.init();
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'Running key encrypt provider init function'
+      );
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'KeyEncryptProvider - no encrypting keys'
+      );
+      let keys = await localStorage.get('keys');
+      expect(keys).toEqual({ key: 'key1' });
     });
 
     it('should show an error if could not decrypt', async () => {
@@ -50,6 +66,36 @@ describe('KeyEncryptProvider', () => {
       expect(loggerSpy).toHaveBeenCalledWith(
         'Could not decrypt storage. Tested 2 keys without success'
       );
+      expect(loggerErrSpy).toHaveBeenCalledWith("ccm: tag doesn't match");
+      expect(keyEncryptProvider.keyEncryptionErr.message).toEqual(
+        'This version is not compatible with your storage, please update to the most recent version or contact support and share the logs provided.'
+      );
+    });
+
+    it('should show an error if no valid json', async () => {
+      keyEncryptProvider.STORAGE_ENCRYPTING_KEYS = [
+        'poiqwerlkhjkasdfgiuwerhjabsdfgks'
+      ];
+      const encryptedKeys = BWC.sjcl.encrypt(
+        'agksdfkjg234587asdjkhfdsakhjg283',
+        JSON.stringify({ key: 'key1' })
+      );
+      spyOn(localStorage, 'get').and.returnValue(
+        Promise.resolve(encryptedKeys)
+      );
+      await keyEncryptProvider.init();
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'Running key encrypt provider init function'
+      );
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'Could not decrypt storage. Tested 1 keys without success'
+      );
+      expect(loggerErrSpy).toHaveBeenCalledWith(
+        "json decode: this isn't json!"
+      );
+      expect(keyEncryptProvider.keyEncryptionErr.message).toEqual(
+        'Your wallet is in a corrupt state. Please contact support and share the logs provided.'
+      );
     });
 
     it('should encrypt keys that are not yet encrypted', async () => {
@@ -62,6 +108,9 @@ describe('KeyEncryptProvider', () => {
       await keyEncryptProvider.init();
       expect(loggerSpy).toHaveBeenCalledWith(
         'Running key encrypt provider init function'
+      );
+      expect(loggerSpy).toHaveBeenCalledWith(
+        'Could not decrypt storage. Tested 1 keys without success'
       );
       expect(loggerSpy).toHaveBeenCalledWith('Not yet encrypted?');
       expect(loggerSpy).toHaveBeenCalledWith(

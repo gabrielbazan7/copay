@@ -9,6 +9,8 @@ import { LocalStorage } from '../persistence/storage/local-storage';
 const privateProps = new WeakMap();
 @Injectable()
 export class KeyEncryptProvider {
+  public keyEncryptionErr: Error;
+
   constructor(
     private logger: Logger,
     private platform: Platform,
@@ -36,8 +38,11 @@ export class KeyEncryptProvider {
   public init() {
     return new Promise<void>(resolve => {
       this.logger.debug('Running key encrypt provider init function');
-      // if(1) return resolve();
       setTimeout(async () => {
+        if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+          this.logger.debug('KeyEncryptProvider - no encrypting keys');
+          return resolve();
+        }
         const storage = this.platform.is('cordova')
           ? this.fileStorage
           : this.localStorage;
@@ -48,7 +53,15 @@ export class KeyEncryptProvider {
           this.logger.debug('KeyEncryptProvider - no keys');
           return resolve();
         }
-        let decryptedKeys = this.tryDescryptKeys(JSON.stringify(keys));
+
+        let decryptedKeys;
+        try {
+          decryptedKeys = this.tryDescryptKeys(JSON.stringify(keys));
+        } catch (err) {
+          this.keyEncryptionErr = err;
+          return resolve();
+        }
+
         const storageEncryptingKey = this.STORAGE_ENCRYPTING_KEYS[
           this.STORAGE_ENCRYPTING_KEYS.length - 1
         ]; // new encrypt key
@@ -75,15 +88,21 @@ export class KeyEncryptProvider {
       } catch (err) {
         if (this.STORAGE_ENCRYPTING_KEYS.length - 1 === index) {
           // Failed on the last iteration
+          this.logger.debug(
+            `Could not decrypt storage. Tested ${this.STORAGE_ENCRYPTING_KEYS.length} keys without success`
+          );
           if (err && err.message == "json decode: this isn't json!") {
-            // TODO
-          } else if (err && err.message == "ccm: tag doesn't match") {
-            this.logger.debug(
-              `Could not decrypt storage. Tested ${this.STORAGE_ENCRYPTING_KEYS.length} keys without success`
+            this.logger.error(err.message);
+            throw new Error(
+              'Your wallet is in a corrupt state. Please contact support and share the logs provided.'
             );
-            // TODO message to the user: this version is not compatible with your storage, please uppdate to the most recent version or contact support
+          } else if (err && err.message == "ccm: tag doesn't match") {
+            this.logger.error(err.message);
+            throw new Error(
+              'This version is not compatible with your storage, please update to the most recent version or contact support and share the logs provided.'
+            );
           } else {
-            this.logger.debug(`Not yet encrypted?`);
+            this.logger.debug('Not yet encrypted?');
           }
         }
         return true; // continue;
