@@ -20,11 +20,7 @@ export class KeyEncryptProvider {
     logger.info(`KeyEncryptProvider Constructor ${new Date().toString()}`);
     // new key at the end
     privateProps.set(this, {
-      STORAGE_ENCRYPTING_KEYS: [
-        'asdfghjklpoiuytrewqazxcvbnjskawq',
-        'poiqwerlkhjkasdfgiuwerhjabsdfgks',
-        'agksdfkjg234587asdjkhfdsakhjg283'
-      ]
+      STORAGE_ENCRYPTING_KEYS: []
     });
   }
 
