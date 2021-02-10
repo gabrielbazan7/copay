@@ -24,18 +24,11 @@ export class KeyEncryptProvider {
     });
   }
 
-  get STORAGE_ENCRYPTING_KEYS() {
-    return privateProps.get(this).STORAGE_ENCRYPTING_KEYS;
-  }
-  set STORAGE_ENCRYPTING_KEYS(STORAGE_ENCRYPTING_KEYS) {
-    privateProps.set(this, { STORAGE_ENCRYPTING_KEYS });
-  }
-
   public init() {
     return new Promise<void>(resolve => {
       this.logger.debug('Running key encrypt provider init function');
       setTimeout(async () => {
-        if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+        if (privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length === 0) {
           this.logger.debug('KeyEncryptProvider - no encrypting keys');
           return resolve();
         }
@@ -58,15 +51,18 @@ export class KeyEncryptProvider {
           return resolve();
         }
 
-        const storageEncryptingKey = this.STORAGE_ENCRYPTING_KEYS[
-          this.STORAGE_ENCRYPTING_KEYS.length - 1
+        const storageEncryptingKey = privateProps.get(this)
+          .STORAGE_ENCRYPTING_KEYS[
+          privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length - 1
         ]; // new encrypt key
         const encryptedKeys = BWC.sjcl.encrypt(
           storageEncryptingKey,
           decryptedKeys
         );
         this.logger.debug(
-          `Storage encrypted with key number: ${this.STORAGE_ENCRYPTING_KEYS.length}`
+          `Storage encrypted with key number: ${
+            privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length
+          }`
         );
         await storage.set('keys', JSON.parse(encryptedKeys));
         return resolve();
@@ -76,16 +72,21 @@ export class KeyEncryptProvider {
 
   private tryDescryptKeys(keys: string) {
     let decryptedKeys;
-    this.STORAGE_ENCRYPTING_KEYS.every((value, index) => {
+    privateProps.get(this).STORAGE_ENCRYPTING_KEYS.every((value, index) => {
       try {
         decryptedKeys = BWC.sjcl.decrypt(value, keys);
         this.logger.debug(`Storage decrypted with key number: ${index + 1}`);
         return false; // break;
       } catch (err) {
-        if (this.STORAGE_ENCRYPTING_KEYS.length - 1 === index) {
+        if (
+          privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length - 1 ===
+          index
+        ) {
           // Failed on the last iteration
           this.logger.debug(
-            `Could not decrypt storage. Tested ${this.STORAGE_ENCRYPTING_KEYS.length} keys without success`
+            `Could not decrypt storage. Tested ${
+              privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length
+            } keys without success`
           );
           if (err && err.message == "json decode: this isn't json!") {
             this.logger.error(err.message);
@@ -108,12 +109,12 @@ export class KeyEncryptProvider {
   }
 
   public encryptKeys(keys): string {
-    if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+    if (privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length === 0) {
       this.logger.debug('encryptKeys - no encrypting keys');
       return JSON.stringify(keys);
     }
-    const encryptingKey = this.STORAGE_ENCRYPTING_KEYS[
-      this.STORAGE_ENCRYPTING_KEYS.length - 1
+    const encryptingKey = privateProps.get(this).STORAGE_ENCRYPTING_KEYS[
+      privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length - 1
     ];
     let encryptedKeys;
     try {
@@ -122,18 +123,20 @@ export class KeyEncryptProvider {
       // something ? TODO
     }
     this.logger.debug(
-      `Storage encrypted successfully with key number: ${this.STORAGE_ENCRYPTING_KEYS.length}`
+      `Storage encrypted successfully with key number: ${
+        privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length
+      }`
     );
     return encryptedKeys;
   }
 
   public decryptKeys(encryptedKeys): string {
-    if (this.STORAGE_ENCRYPTING_KEYS.length === 0) {
+    if (privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length === 0) {
       this.logger.debug('decryptKeys - no encrypting keys');
       return JSON.stringify(encryptedKeys);
     }
-    const encryptingKey = this.STORAGE_ENCRYPTING_KEYS[
-      this.STORAGE_ENCRYPTING_KEYS.length - 1
+    const encryptingKey = privateProps.get(this).STORAGE_ENCRYPTING_KEYS[
+      privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length - 1
     ];
     let keys;
     try {
@@ -142,7 +145,9 @@ export class KeyEncryptProvider {
       // something ? TODO
     }
     this.logger.debug(
-      `Storage decrypted successfully with key number: ${this.STORAGE_ENCRYPTING_KEYS.length}`
+      `Storage decrypted successfully with key number: ${
+        privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length
+      }`
     );
     return keys;
   }
