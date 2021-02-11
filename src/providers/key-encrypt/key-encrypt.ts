@@ -88,18 +88,18 @@ export class KeyEncryptProvider {
               privateProps.get(this).STORAGE_ENCRYPTING_KEYS.length
             } keys without success`
           );
-          if (err && err.message == "json decode: this isn't json!") {
-            this.logger.error(err.message);
-            throw new Error(
-              'Your wallet is in a corrupt state. Please contact support and share the logs provided.'
-            );
-          } else if (err && err.message == "ccm: tag doesn't match") {
+          if (err && err.message == "ccm: tag doesn't match") {
             this.logger.error(err.message);
             throw new Error(
               'This version is not compatible with your storage, please update to the most recent version or contact support and share the logs provided.'
             );
-          } else {
+          } else if (err && err.message == "json decode: this isn't json!") {
             this.logger.debug('Not yet encrypted?');
+            // TODO ??
+            // this.logger.error(err.message);
+            // throw new Error(
+            //   'Your wallet is in a corrupt state. Please contact support and share the logs provided.'
+            // );
           }
         }
         return true; // continue;
