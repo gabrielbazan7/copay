@@ -71,6 +71,14 @@
 //       expect(loggerSpy).toHaveBeenCalledWith(
 //         'Running key encrypt provider init function'
 //       );
+//       keyEncryptProvider.STORAGE_ENCRYPTING_KEYS.forEach(value => {
+//         const storageEncryptingKeyHash = BWC.Bitcore.crypto.Hash.sha256(
+//           Buffer.from(value)
+//         ).toString('hex');
+//         expect(loggerSpy).toHaveBeenCalledWith(
+//           `Trying to decrypt with: ${storageEncryptingKeyHash}`
+//         );
+//       });
 //       expect(loggerSpy).toHaveBeenCalledWith(
 //         'Could not decrypt storage. Tested 2 keys without success'
 //       );
@@ -98,6 +106,14 @@
 //       expect(loggerSpy).toHaveBeenCalledWith(
 //         'Storage encrypted with key number: 1'
 //       );
+//       keyEncryptProvider.STORAGE_ENCRYPTING_KEYS.forEach(value => {
+//         const storageEncryptingKeyHash = BWC.Bitcore.crypto.Hash.sha256(
+//           Buffer.from(value)
+//         ).toString('hex');
+//         expect(loggerSpy).toHaveBeenCalledWith(
+//           `Trying to decrypt with: ${storageEncryptingKeyHash}`
+//         );
+//       });
 //       spy.and.callThrough();
 //       const keys = await localStorage.get('keys');
 //       const decryptedKeys = BWC.sjcl.decrypt(
@@ -129,6 +145,19 @@
 //       );
 //       expect(loggerSpy).toHaveBeenCalledWith(
 //         `Storage encrypted with key number: ${keyEncryptProvider.STORAGE_ENCRYPTING_KEYS.length}`
+//       );
+//       const storageEncryptingKeyHash1 = BWC.Bitcore.crypto.Hash.sha256(
+//         Buffer.from(keyEncryptProvider.STORAGE_ENCRYPTING_KEYS[0])
+//       ).toString('hex');
+//       expect(loggerSpy).toHaveBeenCalledWith(
+//         `Trying to decrypt with: ${storageEncryptingKeyHash1}`
+//       );
+
+//       const storageEncryptingKeyHash2 = BWC.Bitcore.crypto.Hash.sha256(
+//         Buffer.from(keyEncryptProvider.STORAGE_ENCRYPTING_KEYS[0])
+//       ).toString('hex');
+//       expect(loggerSpy).toHaveBeenCalledWith(
+//         `Trying to decrypt with: ${storageEncryptingKeyHash2}`
 //       );
 //       spy.and.callThrough();
 //       const keys = await localStorage.get('keys');

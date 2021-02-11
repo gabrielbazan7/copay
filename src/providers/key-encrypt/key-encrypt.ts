@@ -74,6 +74,12 @@ export class KeyEncryptProvider {
     let decryptedKeys;
     privateProps.get(this).STORAGE_ENCRYPTING_KEYS.every((value, index) => {
       try {
+        const storageEncryptingKeyHash = BWC.Bitcore.crypto.Hash.sha256(
+          Buffer.from(value)
+        ).toString('hex');
+        this.logger.debug(
+          `Trying to decrypt with: ${storageEncryptingKeyHash}`
+        );
         decryptedKeys = BWC.sjcl.decrypt(value, keys);
         this.logger.debug(`Storage decrypted with key number: ${index + 1}`);
         return false; // break;
